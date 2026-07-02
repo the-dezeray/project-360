@@ -21,13 +21,12 @@
     display: flex; flex-direction: column; align-items: center;
   }
   .login-logo {
-    width: 56px; height: 56px; border-radius: 16px;
-    background: #2563eb;
+    width: 80px; height: 80px; border-radius: 16px;
+    background: #fff;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 4px 16px rgba(37,99,235,.4);
     margin-bottom: 20px;
   }
-  .login-logo svg { width: 28px; height: 28px; stroke: #fff; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .login-logo img { width: 72px; height: 72px; object-fit: contain; }
   .login-title { font-size: 22px; font-weight: 800; color: #111827; letter-spacing: .2px; }
   .login-sub   { font-size: 13px; color: #6b7280; margin-top: 4px; margin-bottom: 32px; text-align: center; }
   .login-field { width: 100%; margin-bottom: 16px; }
@@ -110,13 +109,11 @@
     margin-right: 36px;
   }
   .nav-brand .sentinel-icon {
-    width: 36px; height: 36px;
-    background: var(--blue);
+    width: 40px; height: 40px;
     border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 2px 8px rgba(37,99,235,.3);
   }
-  .nav-brand .sentinel-icon svg { width:18px; height:18px; stroke:#fff; fill:none; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+  .nav-brand .sentinel-icon img { width: 40px; height: 40px; object-fit: contain; border-radius: 8px; }
   .nav-brand span { font-weight: 700; font-size: 15px; letter-spacing: .3px; }
   .nav-brand small { color: var(--muted); font-size: 11px; margin-left: 4px; }
   .nav-tabs { display: flex; gap: 4px; }
@@ -608,7 +605,7 @@
 <div id="login-overlay">
   <div class="login-box">
     <div class="login-logo">
-      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <img src="debswana-mini-logo.png" alt="Debswana" />
     </div>
     <div class="login-title">Project 360</div>
     <div class="login-sub">Operational Control Assurance<br>Sign in to continue</div>
@@ -637,21 +634,17 @@
 <nav class="topnav">
   <div class="nav-brand">
     <div class="sentinel-icon">
-      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <img src="debswana-mini-logo.png" alt="Debswana" />
     </div>
     <div>
       <span>Project 360</span>
-      <small>Operational Control Assurance</small>
+      <small>Control Effectiveness Dashboard</small>
     </div>
   </div>
   <div class="nav-tabs">
-    <button class="nav-tab active" onclick="showPage('operational', this)">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
-      Operational Control
-    </button>
-    <button class="nav-tab" onclick="showPage('effectiveness', this)">
-      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      Control Effectiveness <span class="nav-badge" id="alert-badge">1</span>
+    <button class="nav-tab active" onclick="showPage('effectiveness', this)">
+      <i data-lucide="activity" style="width:15px;height:15px;"></i>
+      Control Effectiveness
     </button>
   </div>
   <div class="nav-right">
@@ -664,283 +657,9 @@
 
 
 <!-- ════════════════════════════════════════════════════════════
-     PAGE 1 – OPERATIONAL CONTROL
+     PAGE 1 – CONTROL EFFECTIVENESS DASHBOARD
 ════════════════════════════════════════════════════════════ -->
-<div id="page-operational" class="page active">
-
-  <!-- Scenario Selector -->
-  <div class="scenario-bar">
-    <label>Scenario</label>
-    <select id="scenario-select" onchange="switchScenario(this.value)">
-      <option value="wah">Working at Height</option>
-      <option value="lift">Lifting Operations</option>
-    </select>
-    <span class="scenario-chip" id="scenario-chip">Working at Height</span>
-    <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
-      <span class="text-muted">Permit:</span>
-      <span id="permit-display" style="font-weight:600; font-size:13px;">WAH-2026-004</span>
-    </div>
-  </div>
-
-  <!-- ── Section 1: Executive Dashboard KPIs ── -->
-  <div class="section-header">
-    <h2>Executive Dashboard</h2><div class="sep"></div>
-    <span class="badge blue">Today · 30 Jun 2026</span>
-  </div>
-  <div class="kpi-grid">
-    <div class="kpi-card green">
-      <div class="kpi-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <div class="kpi-label">Operational Status</div>
-      <div class="kpi-value" style="color:var(--green-txt); font-size:20px; padding-top:4px;">ACTIVE</div>
-      <div class="kpi-sub">All systems nominal</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-icon"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="12" y2="16"/></svg></div>
-      <div class="kpi-label">Jobs Today</div>
-      <div class="kpi-value">8</div>
-      <div class="kpi-sub">+2 from yesterday</div>
-    </div>
-    <div class="kpi-card green">
-      <div class="kpi-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-      <div class="kpi-label">Controls Verified</div>
-      <div class="kpi-value" id="kpi-verified" style="color:var(--green-txt);">94%</div>
-      <div class="kpi-sub">of critical controls</div>
-    </div>
-    <div class="kpi-card amber">
-      <div class="kpi-icon"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-      <div class="kpi-label">Open Corrective Actions</div>
-      <div class="kpi-value" id="kpi-ca">2</div>
-      <div class="kpi-sub">1 due today</div>
-    </div>
-    <div class="kpi-card red">
-      <div class="kpi-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
-      <div class="kpi-label">High Risk Jobs</div>
-      <div class="kpi-value" id="kpi-highrisk">1</div>
-      <div class="kpi-sub">Requires supervisor sign-off</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-icon"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
-      <div class="kpi-label">Leadership Visits</div>
-      <div class="kpi-value">5</div>
-      <div class="kpi-sub">Target: 6 per day</div>
-    </div>
-  </div>
-
-  <!-- ── Section 2: Active Work Activity ── -->
-  <div class="section-header"><h2>Active Work Activity</h2><div class="sep"></div></div>
-  <div class="card">
-    <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:16px;">
-      <div>
-        <div class="info-row">
-          <div class="info-item">
-            <label>Activity</label>
-            <span id="act-name">Working at Height</span>
-          </div>
-          <div class="info-item">
-            <label>Location</label>
-            <span id="act-location">Crusher Maintenance Platform</span>
-          </div>
-          <div class="info-item">
-            <label>Supervisor</label>
-            <span id="act-supervisor">John Smith</span>
-          </div>
-          <div class="info-item">
-            <label>Crew</label>
-            <span id="act-crew">Maintenance Team A</span>
-          </div>
-          <div class="info-item">
-            <label>Permit No.</label>
-            <span id="act-permit">WAH-2026-004</span>
-          </div>
-        </div>
-        <span class="badge amber" id="act-status-badge">Ready for Inspection</span>
-      </div>
-      <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-end;">
-        <button class="btn btn-primary" id="btn-start-verify" onclick="startVerification()">
-          <svg style="width:15px;height:15px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          Start Critical Control Verification
-        </button>
-        <button class="btn btn-outline hidden" id="btn-reset" onclick="resetDemo()">
-          <svg style="width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
-          Reset Demo
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── Status Banner ── -->
-  <div id="status-banner" class="status-banner pending hidden">
-    <div class="banner-icon" id="banner-icon"></div>
-    <div class="banner-text">
-      <h3 id="banner-title">Verification In Progress</h3>
-      <p id="banner-sub">Complete all critical controls below</p>
-    </div>
-  </div>
-
-  <!-- ── Section 3: Critical Control Checklist ── -->
-  <div id="checklist-section" class="hidden">
-    <div class="section-header"><h2>Critical Control Verification</h2><div class="sep"></div>
-      <span class="text-muted" id="check-progress">0 / 6 verified</span>
-    </div>
-    <div class="card">
-      <ul class="checklist" id="checklist"></ul>
-      <div class="mt16" style="display:flex; justify-content:flex-end;">
-        <button class="btn btn-success" id="btn-submit" onclick="submitChecklist()" disabled>
-          <svg style="width:15px;height:15px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-          Submit Verification
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── Section 4: Corrective Action ── -->
-  <div class="ca-card" id="ca-card">
-    <div class="ca-header">
-      <span style="width:32px;height:32px;border-radius:8px;background:rgba(220,38,38,.12);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;">
-        <svg style="width:17px;height:17px;stroke:var(--red-txt);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      </span>
-      <h3>Corrective Action — AUTO GENERATED</h3>
-      <span class="badge red" style="margin-left:auto;">OPEN</span>
-    </div>
-    <div class="ca-grid" id="ca-grid"></div>
-  </div>
-
-  <!-- ── Section 5: PDCA Workflow ── -->
-  <div class="section-header" style="margin-top:8px;"><h2>PDCA Workflow</h2><div class="sep"></div></div>
-  <div class="card">
-    <div class="pdca-flow" id="pdca-flow">
-      <div class="pdca-step" id="pdca-plan">
-        <div class="pdca-letter">P</div>
-        <div class="pdca-label">PLAN</div>
-        <div class="pdca-sub">Risk Identified</div>
-      </div>
-      <div class="pdca-arrow">→</div>
-      <div class="pdca-step" id="pdca-do">
-        <div class="pdca-letter">D</div>
-        <div class="pdca-label">DO</div>
-        <div class="pdca-sub">Stop Work</div>
-      </div>
-      <div class="pdca-arrow">→</div>
-      <div class="pdca-step" id="pdca-check">
-        <div class="pdca-letter">C</div>
-        <div class="pdca-label">CHECK</div>
-        <div class="pdca-sub">Supervisor Verification</div>
-      </div>
-      <div class="pdca-arrow">→</div>
-      <div class="pdca-step" id="pdca-act">
-        <div class="pdca-letter">A</div>
-        <div class="pdca-label">ACT</div>
-        <div class="pdca-sub">Resume After Correction</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── Section 6: Leadership Assurance ── -->
-  <div class="section-header"><h2>Leadership Assurance Visit</h2><div class="sep"></div></div>
-  <div class="card" id="lv-card">
-    <div id="lv-form">
-      <div class="lv-question">
-        <p>Were Critical Controls verified before work commenced?</p>
-        <div class="toggle-group">
-          <button class="toggle-btn yes" onclick="toggleLV(this,'lv1')">Yes</button>
-          <button class="toggle-btn no"  onclick="toggleLV(this,'lv1')">No</button>
-        </div>
-      </div>
-      <div class="lv-question">
-        <p>Was unsafe work identified and stopped?</p>
-        <div class="toggle-group">
-          <button class="toggle-btn yes" onclick="toggleLV(this,'lv2')">Yes</button>
-          <button class="toggle-btn no"  onclick="toggleLV(this,'lv2')">No</button>
-        </div>
-      </div>
-      <div class="lv-question">
-        <p>Were all workers briefed on critical controls?</p>
-        <div class="toggle-group">
-          <button class="toggle-btn yes" onclick="toggleLV(this,'lv3')">Yes</button>
-          <button class="toggle-btn no"  onclick="toggleLV(this,'lv3')">No</button>
-        </div>
-      </div>
-      <textarea id="lv-comments" rows="3" placeholder="Comments (optional)…"></textarea>
-      <div class="mt16">
-        <button class="btn btn-primary" onclick="completeLV()">
-          <svg style="width:15px;height:15px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          Complete Leadership Visit
-        </button>
-      </div>
-    </div>
-    <div id="lv-complete" class="hidden" style="text-align:center; padding: 24px 0;">
-      <div style="width:56px;height:56px;border-radius:50%;background:var(--green-bg);border:2px solid var(--green);display:inline-flex;align-items:center;justify-content:center;">
-        <svg style="width:26px;height:26px;stroke:var(--green);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-      </div>
-      <h3 style="margin-top:14px; color:var(--green-txt);">Leadership Assurance Completed</h3>
-      <p class="text-muted mt8">Visit recorded — John Smith · 30 Jun 2026 · 10:24</p>
-    </div>
-  </div>
-
-  <!-- ── Section 7: Trends Chart ── -->
-  <div class="section-header"><h2>Operational Trends</h2><div class="sep"></div></div>
-  <div class="card">
-    <div class="card-title">Most Common Critical Control Failures — Last 6 Months</div>
-    <div class="chart-wrap" style="max-height:280px;">
-      <canvas id="trend-chart"></canvas>
-    </div>
-  </div>
-
-</div><!-- /page-operational -->
-
-
-<!-- ════════════════════════════════════════════════════════════
-     PAGE 2 – CONTROL EFFECTIVENESS DASHBOARD
-════════════════════════════════════════════════════════════ -->
-<div id="page-effectiveness" class="page">
-
-  <!-- ══ WHAT MOST COMPANIES MEASURE vs EFFECTIVENESS ══ -->
-  <div class="vs-callout">
-    <div class="vs-side old">
-      <div class="vs-label">❌ What Most Companies Measure (Activity)</div>
-      <div class="vs-item"><span class="dot"></span>Inspections completed</div>
-      <div class="vs-item"><span class="dot"></span>Audits completed</div>
-      <div class="vs-item"><span class="dot"></span>PTOs completed</div>
-      <div style="margin-top:12px; font-size:12px; color:var(--red-txt); font-weight:600;">These measure ACTIVITY — not effectiveness.</div>
-    </div>
-    <div class="vs-divider">→</div>
-    <div class="vs-side new">
-      <div class="vs-label">✅ Project 360 Measures Effectiveness (CEI)</div>
-      <div class="vs-item"><span class="dot"></span>Is the control physically in place?</div>
-      <div class="vs-item"><span class="dot"></span>Is someone checking the control?</div>
-      <div class="vs-item"><span class="dot"></span>Are people actually using the control?</div>
-      <div class="vs-item"><span class="dot"></span>Is the control preventing incidents?</div>
-      <div style="margin-top:12px; font-size:12px; color:var(--green-txt); font-weight:600;">Scored out of 100 per control, per month.</div>
-    </div>
-  </div>
-
-  <!-- ══ SAEI HERO BANNER ══ -->
-  <div class="saei-hero" id="saei-hero">
-    <div class="saei-ring-wrap">
-      <svg class="saei-ring-svg" viewBox="0 0 110 110">
-        <circle class="saei-ring-track" cx="55" cy="55" r="48"/>
-        <circle class="saei-ring-fill" id="saei-ring-fill" cx="55" cy="55" r="48"
-          stroke="#4ade80"
-          stroke-dasharray="301.6"
-          stroke-dashoffset="301.6"/>
-      </svg>
-      <div class="saei-ring-text">
-        <span class="saei-ring-val" id="saei-score-val">89</span>
-        <span class="saei-ring-lbl">SAEI</span>
-      </div>
-    </div>
-    <div class="saei-info">
-      <h2>Sentinel Assurance Effectiveness Index</h2>
-      <p>Site-wide weighted measure of control assurance health — updated monthly</p>
-      <div class="saei-status-pill">
-        <span class="saei-status-dot"></span>
-        <span id="saei-status-txt">🟢 Effective</span>
-      </div>
-    </div>
-    <div class="saei-components" id="saei-components">
-      <!-- JS populated -->
-    </div>
-  </div>
+<div id="page-effectiveness" class="page active">
 
   <!-- ══ CEI EXECUTIVE TABLE ══ -->
   <div class="section-header">
@@ -970,6 +689,46 @@
     </div>
   </div>
 
+  <!-- ══ SAEI HERO ══ -->
+  <div class="section-header" style="margin-top:24px;">
+    <h2>Strategic Action Effectiveness Index (SAEI)</h2><div class="sep"></div>
+    <span class="badge blue">Enterprise assurance view</span>
+  </div>
+  <div class="card saei-hero">
+    <div class="saei-ring-wrap">
+      <svg class="saei-ring-svg" viewBox="0 0 110 110" aria-label="SAEI score ring">
+        <circle class="saei-ring-track" cx="55" cy="55" r="48"></circle>
+        <circle
+          id="saei-ring-fill"
+          class="saei-ring-fill"
+          cx="55"
+          cy="55"
+          r="48"
+          stroke="#4ade80"
+          stroke-dasharray="301.59289474462014"
+          stroke-dashoffset="301.59289474462014"
+        ></circle>
+      </svg>
+      <div class="saei-ring-text">
+        <div class="saei-ring-val">89</div>
+        <div class="saei-ring-lbl">SAEI</div>
+      </div>
+    </div>
+    <div class="saei-info">
+      <h2>Strategic Action Effectiveness</h2>
+      <p>A weighted assurance score across critical controls, implementation discipline, and verified outcomes.</p>
+      <div class="saei-status-pill">
+        <svg id="saei-status-icon" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span id="saei-status-label">Effective</span>
+      </div>
+    </div>
+    <div id="saei-components" class="saei-components">
+      <!-- JS populated -->
+    </div>
+  </div>
+
   <!-- ══ SAEI BREAKDOWN ══ -->
   <div class="section-header">
     <h2>SAEI Component Breakdown</h2><div class="sep"></div>
@@ -986,37 +745,37 @@
   </div>
   <div class="kpi-grid">
     <div class="kpi-card green">
-      <div class="kpi-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="kpi-icon"><i data-lucide="check-circle-2"></i></div>
       <div class="kpi-label">Controls Verified</div>
       <div class="kpi-value" style="color:var(--green-txt);">94%</div>
       <div class="kpi-sub">of all critical controls</div>
     </div>
     <div class="kpi-card red">
-      <div class="kpi-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
+      <div class="kpi-icon"><i data-lucide="x-circle"></i></div>
       <div class="kpi-label">Controls Failed</div>
       <div class="kpi-value" style="color:var(--red-txt);">6%</div>
       <div class="kpi-sub">Requires corrective action</div>
     </div>
     <div class="kpi-card amber">
-      <div class="kpi-icon"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <div class="kpi-icon"><i data-lucide="alert-triangle"></i></div>
       <div class="kpi-label">High Risk Activities</div>
       <div class="kpi-value">3</div>
       <div class="kpi-sub">Active this month</div>
     </div>
     <div class="kpi-card green">
-      <div class="kpi-icon"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+      <div class="kpi-icon"><i data-lucide="clipboard-check"></i></div>
       <div class="kpi-label">Actions Closed</div>
       <div class="kpi-value" style="color:var(--green-txt);">91%</div>
       <div class="kpi-sub">52 of 57 resolved</div>
     </div>
     <div class="kpi-card green">
-      <div class="kpi-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <div class="kpi-icon"><i data-lucide="bar-chart-2"></i></div>
       <div class="kpi-label">Effectiveness Score</div>
       <div class="kpi-value" style="color:var(--green-txt);">88%</div>
-      <div class="kpi-sub">↑ 4% from last period</div>
+      <div class="kpi-sub" style="display:flex;align-items:center;gap:4px;"><i data-lucide="trending-up" style="width:12px;height:12px;stroke:var(--green-txt);"></i> 4% from last period</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-icon"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+      <div class="kpi-icon"><i data-lucide="eye"></i></div>
       <div class="kpi-label">Assurance Visits</div>
       <div class="kpi-value">24</div>
       <div class="kpi-sub">Target: 30</div>
@@ -1123,15 +882,19 @@
     <div style="display:flex; align-items:center; gap:40px; flex-wrap:wrap;">
 
       <!-- Gauge -->
-      <div style="flex-shrink:0; width:240px; margin: 0 auto;">
-        <canvas id="gauge-chart" width="240" height="150"></canvas>
+      <div style="flex-shrink:0; width:200px; position:relative; margin: 0 auto;">
+        <canvas id="gauge-chart" width="200" height="200"></canvas>
+        <div id="gauge-center-label" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;">
+          <div style="font-size:28px;font-weight:800;color:#b45309;line-height:1;">80%</div>
+          <div style="font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;">Compliance</div>
+        </div>
       </div>
 
       <!-- KPI pills -->
       <div style="display:flex; flex-direction:column; gap:14px; flex:1; min-width:180px;">
         <div style="display:flex; align-items:center; gap:14px;">
           <div style="width:42px; height:42px; border-radius:12px; background:var(--blue-bg); border:1px solid var(--blue); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-            <svg style="width:18px;height:18px;stroke:var(--blue-txt);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <i data-lucide="target" style="width:18px;height:18px;stroke:var(--blue-txt);"></i>
           </div>
           <div>
             <div style="font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px;">Target Visits</div>
@@ -1140,7 +903,7 @@
         </div>
         <div style="display:flex; align-items:center; gap:14px;">
           <div style="width:42px; height:42px; border-radius:12px; background:var(--green-bg); border:1px solid var(--green); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-            <svg style="width:18px;height:18px;stroke:var(--green-txt);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            <i data-lucide="check-circle-2" style="width:18px;height:18px;stroke:var(--green-txt);"></i>
           </div>
           <div>
             <div style="font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px;">Completed</div>
@@ -1149,7 +912,7 @@
         </div>
         <div style="display:flex; align-items:center; gap:14px;">
           <div style="width:42px; height:42px; border-radius:12px; background:var(--red-bg); border:1px solid var(--red); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-            <svg style="width:18px;height:18px;stroke:var(--red-txt);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <i data-lucide="alert-circle" style="width:18px;height:18px;stroke:var(--red-txt);"></i>
           </div>
           <div>
             <div style="font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px;">Outstanding</div>
@@ -1201,7 +964,7 @@ function doLogin() {
 const CEI_DATA = [
   {
     name: "Vehicle Interaction",
-    trend: "↑", trendColor: "var(--green-txt)",
+    trend: "up", trendColor: "var(--green-txt)",
     impl: 23, verif: 22, comp: 24, outcome: 23,
     detail: {
       impl:    { score:23, items:["Barriers installed","Speed limits posted","Pedestrian lanes marked"] },
@@ -1212,7 +975,7 @@ const CEI_DATA = [
   },
   {
     name: "Isolation (LOTO)",
-    trend: "→", trendColor: "var(--muted)",
+    trend: "flat", trendColor: "var(--muted)",
     impl: 22, verif: 21, comp: 23, outcome: 22,
     detail: {
       impl:    { score:22, items:["Lockout stations installed","Isolation registers in place","Tags available at all points"] },
@@ -1223,7 +986,7 @@ const CEI_DATA = [
   },
   {
     name: "Working at Heights",
-    trend: "↓", trendColor: "var(--red-txt)",
+    trend: "down", trendColor: "var(--red-txt)",
     impl: 23, verif: 18, comp: 18, outcome: 16,
     detail: {
       impl:    { score:23, items:["Harnesses available","Anchor points installed","Permit system available"] },
@@ -1234,7 +997,7 @@ const CEI_DATA = [
   },
   {
     name: "Lifting Operations",
-    trend: "↑", trendColor: "var(--green-txt)",
+    trend: "up", trendColor: "var(--green-txt)",
     impl: 21, verif: 20, comp: 21, outcome: 19,
     detail: {
       impl:    { score:21, items:["Lift plan templates in place","Crane inspection register","Rigging certification board"] },
@@ -1245,7 +1008,7 @@ const CEI_DATA = [
   },
   {
     name: "Confined Space",
-    trend: "↑", trendColor: "var(--green-txt)",
+    trend: "up", trendColor: "var(--green-txt)",
     impl: 24, verif: 23, comp: 24, outcome: 23,
     detail: {
       impl:    { score:24, items:["Entry permits in place","Gas monitoring equipment available","Rescue plan posted at entry"] },
@@ -1373,9 +1136,13 @@ function buildCEITable() {
             <span style="font-size:12px;color:var(--muted);min-width:28px;">${row.verif}/25</span>
             <span style="font-size:12px;color:var(--muted);min-width:28px;">${row.comp}/25</span>
             <span style="font-size:12px;color:var(--muted);min-width:28px;">${row.outcome}/25</span>
-            <span class="cei-trend" style="color:${row.trendColor};">${row.trend}</span>
+            <span class="cei-trend" style="color:${row.trendColor};">${
+              row.trend === 'up'   ? '<i data-lucide="trending-up" style="width:14px;height:14px;"></i>' :
+              row.trend === 'down' ? '<i data-lucide="trending-down" style="width:14px;height:14px;"></i>' :
+                                    '<i data-lucide="minus" style="width:14px;height:14px;"></i>'
+            }</span>
             <span class="cei-band ${bandClass}">${bandLabel}</span>
-            <svg class="cei-chevron" id="cei-chev-${i}" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <i data-lucide="chevron-down" class="cei-chevron" id="cei-chev-${i}" style="width:16px;height:16px;flex-shrink:0;transition:transform .2s;"></i>
           </div>
           <div class="cei-detail" id="cei-detail-${i}">
             ${buildCEIDetail(row, i)}
@@ -1383,6 +1150,7 @@ function buildCEITable() {
         </td>
       </tr>`;
   }).join('');
+  lucide.createIcons();
 }
 
 function buildCEIDetail(row, i) {
@@ -1488,6 +1256,7 @@ function drawCEISparkline(i, row) {
 function buildSAEIHero() {
   // Animate the big ring
   const fill  = document.getElementById('saei-ring-fill');
+  if (!fill) return;
   const saei  = 89;
   const circ  = 2 * Math.PI * 48;
   const off   = circ - (saei / 100) * circ;
@@ -1499,14 +1268,23 @@ function buildSAEIHero() {
   });
 
   // status
-  const statusEl = document.getElementById('saei-status-txt');
-  if      (saei >= 90) { statusEl.textContent = '🟢 Highly Effective'; fill.setAttribute('stroke','#4ade80'); }
-  else if (saei >= 80) { statusEl.textContent = '🟢 Effective';        fill.setAttribute('stroke','#4ade80'); }
-  else if (saei >= 70) { statusEl.textContent = '🟡 Marginal';         fill.setAttribute('stroke','#fbbf24'); }
-  else                 { statusEl.textContent = '🔴 Intervention Needed'; fill.setAttribute('stroke','#f87171'); }
+  const iconEl  = document.getElementById('saei-status-icon');
+  const labelEl = document.getElementById('saei-status-label');
+  if (!iconEl || !labelEl) return;
+  function setStatus(label, color, iconPath) {
+    labelEl.textContent = label;
+    iconEl.setAttribute('stroke', color);
+    iconEl.innerHTML = iconPath;
+    fill.setAttribute('stroke', color);
+  }
+  if      (saei >= 90) setStatus('Highly Effective', '#4ade80', '<polyline points="20 6 9 17 4 12"/>');
+  else if (saei >= 80) setStatus('Effective',        '#4ade80', '<polyline points="20 6 9 17 4 12"/>');
+  else if (saei >= 70) setStatus('Marginal',         '#fbbf24', '<path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>');
+  else                 setStatus('Intervention Needed', '#f87171', '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>');
 
   // component pills
   const container = document.getElementById('saei-components');
+  if (!container) return;
   container.innerHTML = SAEI_COMPONENTS.map((c, idx) => {
     const pct = c.score;
     return `
@@ -1553,7 +1331,7 @@ function buildSAEIBreakdown() {
           </div>
           <div class="saei-bd-right">
             <span class="cei-band ${bandClass}" style="font-size:11px;">${c.score}/100</span>
-            <svg class="saei-bd-chevron" id="saei-chev-${i}" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            <i data-lucide="chevron-down" class="saei-bd-chevron" id="saei-chev-${i}" style="width:18px;height:18px;flex-shrink:0;transition:transform .2s;"></i>
           </div>
         </div>
         <div class="saei-bd-body" id="saei-body-${i}">
@@ -2168,11 +1946,12 @@ function populateHeatmap(id, data) {
           <div class="hm-bar-wrap">
             <div class="hm-bar-fill" style="width:${r.pct}%;background:${dotColor};"></div>
           </div>
-          ${hasCEI ? `<svg class="hm-chevron" id="${rowId}-chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>` : ''}
+          ${hasCEI ? `<i data-lucide="chevron-down" class="hm-chevron" id="${rowId}-chev" style="width:14px;height:14px;flex-shrink:0;transition:transform .2s;"></i>` : ''}
         </div>
         ${detail}
       </div>`;
   }).join('');
+  lucide.createIcons();
 }
 
 // track heatmap sparkline charts
@@ -2280,32 +2059,6 @@ const CHART_DEFAULTS = {
   grid: { color: 'rgba(0,0,0,0.06)' },
 };
 
-function buildTrendChart() {
-  const ctx = document.getElementById('trend-chart').getContext('2d');
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Harness','Weather Assessment','Permit to Work','Anchor Point','Rescue Plan'],
-      datasets: [{
-        label: 'Failures',
-        data: [12, 28, 3, 8, 2],
-        backgroundColor: ['#dc2626','#d97706','#16a34a','#dc2626','#16a34a'],
-        borderRadius: 8, borderSkipped: false,
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: true,
-      plugins: { legend: { display: false }, tooltip: { callbacks: {
-        label: ctx => ` ${ctx.raw} failures`
-      }}},
-      scales: {
-        x: { ticks: { color: '#6b7280' }, grid: { color:'rgba(0,0,0,.06)' } },
-        y: { ticks: { color: '#6b7280' }, grid: { color:'rgba(0,0,0,.06)' }, beginAtZero: true }
-      }
-    }
-  });
-}
-
 function buildFailTrendChart() {
   const ctx = document.getElementById('fail-trend-chart').getContext('2d');
   new Chart(ctx, {
@@ -2355,136 +2108,31 @@ function buildTopFailChart() {
 }
 
 function buildGaugeChart() {
-  const pct     = 80;
-  const canvas  = document.getElementById('gauge-chart');
-  const W = canvas.width  = 240;
-  const H = canvas.height = 150;
+  const pct    = 80;
+  const canvas = document.getElementById('gauge-chart');
+  if (!canvas) return;
 
-  // ── Gauge plugin: draws everything directly on the canvas ──
-  const gaugePlugin = {
-    id: 'gaugeRenderer',
-    afterDraw(chart) {
-      const { ctx } = chart;
-      const cx = W / 2;
-      const cy = H - 26;          // pivot sits near the bottom
-      const r  = 88;               // outer radius
-      const trackW = 20;           // arc thickness
-
-      const startAngle = Math.PI;          // 180° — left
-      const endAngle   = 0;                // 0°   — right
-      const valueAngle = Math.PI - (pct / 100) * Math.PI;  // needle angle
-
-      // ── 1. Track (background arc) ──
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, startAngle, endAngle, false);
-      ctx.lineWidth   = trackW;
-      ctx.strokeStyle = '#e5e7eb';
-      ctx.lineCap     = 'round';
-      ctx.stroke();
-
-      // ── 2. Colour zones (green / amber / red bands) ──
-      const zones = [
-        { from: 0,  to: 60,  color: '#fca5a5' },   // red zone
-        { from: 60, to: 80,  color: '#fcd34d' },   // amber zone
-        { from: 80, to: 100, color: '#86efac' },   // green zone
-      ];
-      zones.forEach(z => {
-        const a1 = Math.PI - (z.from / 100) * Math.PI;
-        const a2 = Math.PI - (z.to   / 100) * Math.PI;
-        ctx.beginPath();
-        ctx.arc(cx, cy, r, a1, a2, true);   // counterclockwise = left→right
-        ctx.lineWidth   = trackW;
-        ctx.strokeStyle = z.color;
-        ctx.lineCap     = 'butt';
-        ctx.stroke();
-      });
-
-      // ── 3. Filled arc (progress) ──
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, startAngle, valueAngle, true);
-      ctx.lineWidth   = trackW;
-      ctx.strokeStyle = '#d97706';   // amber — matches compliance colour
-      ctx.lineCap     = 'round';
-      ctx.stroke();
-
-      // ── 4. Tick marks ──
-      [0, 25, 50, 75, 100].forEach(v => {
-        const a   = Math.PI - (v / 100) * Math.PI;
-        const ri  = r - trackW / 2 - 2;
-        const ro  = r + trackW / 2 + 2;
-        ctx.beginPath();
-        ctx.moveTo(cx + ri * Math.cos(a), cy + ri * Math.sin(a));
-        ctx.lineTo(cx + ro * Math.cos(a), cy + ro * Math.sin(a));
-        ctx.lineWidth   = 1.5;
-        ctx.strokeStyle = '#fff';
-        ctx.stroke();
-
-        // tick label
-        const lr = r + trackW / 2 + 14;
-        ctx.font         = '10px system-ui, sans-serif';
-        ctx.fillStyle    = '#9ca3af';
-        ctx.textAlign    = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(v + '%', cx + lr * Math.cos(a), cy + lr * Math.sin(a));
-      });
-
-      // ── 5. Needle ──
-      const needleLen  = r - trackW / 2 - 6;
-      const needleBase = 7;
-      const nx = cx + needleLen * Math.cos(valueAngle);
-      const ny = cy + needleLen * Math.sin(valueAngle);
-
-      ctx.beginPath();
-      ctx.moveTo(
-        cx + needleBase * Math.cos(valueAngle + Math.PI / 2),
-        cy + needleBase * Math.sin(valueAngle + Math.PI / 2)
-      );
-      ctx.lineTo(nx, ny);
-      ctx.lineTo(
-        cx + needleBase * Math.cos(valueAngle - Math.PI / 2),
-        cy + needleBase * Math.sin(valueAngle - Math.PI / 2)
-      );
-      ctx.closePath();
-      ctx.fillStyle = '#374151';
-      ctx.fill();
-
-      // needle pivot dot
-      ctx.beginPath();
-      ctx.arc(cx, cy, 9, 0, Math.PI * 2);
-      ctx.fillStyle = '#374151';
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(cx, cy, 4, 0, Math.PI * 2);
-      ctx.fillStyle = '#fff';
-      ctx.fill();
-
-      // ── 6. Centre labels ──
-      ctx.font         = 'bold 28px system-ui, sans-serif';
-      ctx.fillStyle    = '#b45309';
-      ctx.textAlign    = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(pct + '%', cx, cy + 22);
-
-      ctx.font         = '11px system-ui, sans-serif';
-      ctx.fillStyle    = '#6b7280';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('COMPLIANCE', cx, cy + 38);
-    }
-  };
-
-  // Minimal Chart.js instance — just a vehicle for the plugin + animation
   new Chart(canvas, {
     type: 'doughnut',
-    data: { datasets: [{ data: [0], backgroundColor: 'transparent', borderWidth: 0 }] },
+    data: {
+      datasets: [{
+        data: [pct, 100 - pct],
+        backgroundColor: ['#d97706', '#e5e7eb'],
+        borderWidth: 0,
+        borderRadius: 6,
+      }]
+    },
     options: {
       responsive: false,
-      cutout: '100%',
-      rotation: -Math.PI,
-      circumference: Math.PI,
-      animation: { duration: 0 },
-      plugins: { legend: { display: false }, tooltip: { enabled: false } },
-    },
-    plugins: [gaugePlugin]
+      cutout: '72%',
+      rotation: -90,
+      circumference: 360,
+      animation: { animateRotate: true, duration: 800 },
+      plugins: {
+        legend:  { display: false },
+        tooltip: { enabled: false },
+      }
+    }
   });
 }
 
@@ -2531,11 +2179,11 @@ document.addEventListener('DOMContentLoaded', () => {
   populateIndicators('lagging-list', LAGGING);
   populatePDCAHealth();
   populateActionTable();
-  buildTrendChart();
   buildFailTrendChart();
   buildTopFailChart();
   buildGaugeChart();
   buildSupervisorBars();
+  lucide.createIcons();
 });
 </script>
 </body>
