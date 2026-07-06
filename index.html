@@ -138,6 +138,49 @@
   .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
 
+  /* ── Modal ────────────────────────────────────────────────── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,.5); backdrop-filter: blur(4px);
+    display: none; align-items: center; justify-content: center;
+    animation: fadeIn .2s ease;
+  }
+  .modal-overlay.active { display: flex; }
+  @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+  .modal-box {
+    background: var(--surface); border-radius: var(--radius-lg);
+    box-shadow: 0 24px 64px rgba(0,0,0,.25);
+    padding: 32px 36px; width: 100%; max-width: 500px;
+    animation: slideUp .3s ease;
+  }
+  @keyframes slideUp { from{transform:translateY(20px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  .modal-header h3 { font-size: 18px; font-weight: 700; }
+  .modal-close {
+    width: 32px; height: 32px; border-radius: 8px; border: none;
+    background: var(--surface2); color: var(--muted); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s;
+  }
+  .modal-close:hover { background: var(--border); color: var(--text); }
+  .modal-field { margin-bottom: 18px; }
+  .modal-field label {
+    display: block; font-size: 11px; font-weight: 600; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px;
+  }
+  .modal-field input, .modal-field select, .modal-field textarea {
+    width: 100%; padding: 10px 14px; border-radius: 8px;
+    border: 1.5px solid var(--border); background: var(--surface2);
+    font-size: 14px; color: var(--text); outline: none;
+    transition: border-color .15s, box-shadow .15s; font-family: inherit;
+  }
+  .modal-field input:focus, .modal-field select:focus, .modal-field textarea:focus {
+    border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,.12); background: var(--surface);
+  }
+  .modal-field textarea { resize: vertical; min-height: 80px; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 24px; }
+  .modal-actions .btn { flex: 1; justify-content: center; }
+
   /* ── Layout ───────────────────────────────────────────────── */
   .page { display: none; padding: 32px 28px; max-width: 1400px; margin: 0 auto; }
   .page.active { display: block; }
@@ -648,12 +691,77 @@
     </button>
   </div>
   <div class="nav-right">
+    <button class="btn btn-primary" onclick="openDataModal()">
+      <i data-lucide="plus" style="width:14px;height:14px;"></i>
+      Add Data
+    </button>
     <div class="nav-status">
       <div class="pulse"></div>
       Live Demo · 30 Jun 2026
     </div>
   </div>
 </nav>
+
+<!-- ════════════════════════════════════════════════════════════
+     DATA INPUT MODAL
+════════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="dataModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Add  Data</h3>
+      <button class="modal-close" onclick="closeDataModal()">
+        <i data-lucide="x" style="width:16px;height:16px;"></i>
+      </button>
+    </div>
+    
+    <form id="dataForm" onsubmit="submitData(event)">
+      <div class="modal-field">
+        <label>Control Name</label>
+        <select id="controlName" required>
+          <option value="">Select a control...</option>
+          <option value="Vehicle Interaction">Vehicle Interaction</option>
+          <option value="Isolation (LOTO)">Isolation (LOTO)</option>
+          <option value="Working at Heights">Working at Heights</option>
+          <option value="Lifting Operations">Lifting Operations</option>
+          <option value="Confined Space">Confined Space</option>
+        </select>
+      </div>
+
+      <div class="modal-field">
+        <label>Implementation Score (0-25)</label>
+        <input type="number" id="implScore" min="0" max="25" required placeholder="Enter score 0-25" />
+      </div>
+
+      <div class="modal-field">
+        <label>Verification Score (0-25)</label>
+        <input type="number" id="verifScore" min="0" max="25" required placeholder="Enter score 0-25" />
+      </div>
+
+      <div class="modal-field">
+        <label>Compliance Score (0-25)</label>
+        <input type="number" id="compScore" min="0" max="25" required placeholder="Enter score 0-25" />
+      </div>
+
+      <div class="modal-field">
+        <label>Outcome Score (0-25)</label>
+        <input type="number" id="outcomeScore" min="0" max="25" required placeholder="Enter score 0-25" />
+      </div>
+
+      <div class="modal-field">
+        <label>Notes (Optional)</label>
+        <textarea id="notes" placeholder="Enter any additional notes..."></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" onclick="closeDataModal()">Cancel</button>
+        <button type="submit" class="btn btn-success">
+          <i data-lucide="check" style="width:14px;height:14px;"></i>
+          Submit Data
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 
 
 <!-- ════════════════════════════════════════════════════════════
@@ -671,7 +779,7 @@
       <table class="cei-table">
         <thead>
           <tr>
-            <th style="padding-left:14px;">Critical Control</th>
+            <th style="padding-left:14px;">Potential Unwated Events</th>
             <th>CEI Score</th>
             <th>Impl.</th>
             <th>Verif.</th>
@@ -956,6 +1064,67 @@ function doLogin() {
     document.getElementById('login-pass').focus();
   }
 }
+
+// ═══════════════════════════════════════════════════════
+//  DATA INPUT MODAL
+// ═══════════════════════════════════════════════════════
+function openDataModal() {
+  const modal = document.getElementById('dataModal');
+  modal.classList.add('active');
+  // Re-render icons in modal
+  lucide.createIcons();
+}
+
+function closeDataModal() {
+  const modal = document.getElementById('dataModal');
+  modal.classList.remove('active');
+  // Reset form
+  document.getElementById('dataForm').reset();
+}
+
+function submitData(event) {
+  event.preventDefault();
+  
+  // Get form values
+  const controlName = document.getElementById('controlName').value;
+  const impl = parseInt(document.getElementById('implScore').value);
+  const verif = parseInt(document.getElementById('verifScore').value);
+  const comp = parseInt(document.getElementById('compScore').value);
+  const outcome = parseInt(document.getElementById('outcomeScore').value);
+  const notes = document.getElementById('notes').value;
+  
+  // Calculate total
+  const total = impl + verif + comp + outcome;
+  
+  // Create data object
+  const newData = {
+    control: controlName,
+    implementation: impl,
+    verification: verif,
+    compliance: comp,
+    outcome: outcome,
+    total: total,
+    notes: notes,
+    timestamp: new Date().toLocaleString()
+  };
+  
+  // Log to console (in a real app, you'd send this to a backend)
+  console.log('New dummy data submitted:', newData);
+  
+  // Show success message
+  alert(`Data submitted successfully!\n\nControl: ${controlName}\nTotal Score: ${total}/100\n\nData logged to console.`);
+  
+  // Close modal
+  closeDataModal();
+}
+
+// Close modal when clicking outside
+document.addEventListener('click', function(event) {
+  const modal = document.getElementById('dataModal');
+  if (event.target === modal) {
+    closeDataModal();
+  }
+});
 
 // ═══════════════════════════════════════════════════════
 //  CEI / SAEI DATA
