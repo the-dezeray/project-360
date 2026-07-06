@@ -691,6 +691,10 @@
     </button>
   </div>
   <div class="nav-right">
+    <button class="btn btn-outline" onclick="openDataHistoryModal()" title="View submitted data history">
+      <i data-lucide="database" style="width:14px;height:14px;"></i>
+      View Data
+    </button>
     <button class="btn btn-primary" onclick="openDataModal()">
       <i data-lucide="plus" style="width:14px;height:14px;"></i>
       Add Data
@@ -760,6 +764,62 @@
         </button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     DATA HISTORY MODAL
+════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="dataHistoryModal">
+  <div class="modal-box" style="max-width: 900px;">
+    <div class="modal-header">
+      <h3>Data Submission History</h3>
+      <button class="modal-close" onclick="closeDataHistoryModal()">
+        <i data-lucide="x" style="width:16px;height:16px;"></i>
+      </button>
+    </div>
+    
+    <div style="margin-bottom: 16px; display: flex; gap: 10px; align-items: center;">
+      <div style="flex: 1; font-size: 12px; color: var(--muted);">
+        <span id="history-count">0</span> entries stored locally
+      </div>
+      <button class="btn btn-outline" onclick="exportDataToCSV()" title="Download data as CSV">
+        <i data-lucide="download" style="width:14px;height:14px;"></i>
+        Export CSV
+      </button>
+      <button class="btn btn-danger" onclick="clearStoredData()" title="Clear all data">
+        <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
+        Clear All
+      </button>
+    </div>
+    
+    <div style="max-height: 500px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px;">
+      <table style="width: 100%; font-size: 12px;">
+        <thead style="position: sticky; top: 0; background: var(--surface); z-index: 10;">
+          <tr>
+            <th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border);">Date/Time</th>
+            <th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border);">Control</th>
+            <th style="padding: 8px; text-align: center; border-bottom: 2px solid var(--border);">Impl.</th>
+            <th style="padding: 8px; text-align: center; border-bottom: 2px solid var(--border);">Verif.</th>
+            <th style="padding: 8px; text-align: center; border-bottom: 2px solid var(--border);">Comp.</th>
+            <th style="padding: 8px; text-align: center; border-bottom: 2px solid var(--border);">Out.</th>
+            <th style="padding: 8px; text-align: center; border-bottom: 2px solid var(--border);">Total</th>
+            <th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border);">Notes</th>
+          </tr>
+        </thead>
+        <tbody id="history-table-body">
+          <tr>
+            <td colspan="8" style="padding: 40px; text-align: center; color: var(--muted);">
+              No data submitted yet
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="modal-actions" style="margin-top: 20px;">
+      <button type="button" class="btn btn-primary" onclick="closeDataHistoryModal()" style="flex: 1;">Close</button>
+    </div>
   </div>
 </div>
 
@@ -1066,8 +1126,10 @@ function doLogin() {
 }
 
 // ═══════════════════════════════════════════════════════
-//  DATA INPUT MODAL
+//  DATA INPUT MODAL WITH LOCALSTORAGE
 // ═══════════════════════════════════════════════════════
+const STORAGE_KEY = 'control360_cei_data';
+
 function openDataModal() {
   const modal = document.getElementById('dataModal');
   modal.classList.add('active');
@@ -1096,8 +1158,8 @@ function submitData(event) {
   // Calculate total
   const total = impl + verif + comp + outcome;
   
-  // Create data object
-  const newData = {
+  // Create data entry
+  const newEntry = {
     control: controlName,
     implementation: impl,
     verification: verif,
@@ -1105,24 +1167,278 @@ function submitData(event) {
     outcome: outcome,
     total: total,
     notes: notes,
-    timestamp: new Date().toLocaleString()
+    timestamp: new Date().toISOString(),
+    date: new Date().toLocaleString()
   };
   
-  // Log to console (in a real app, you'd send this to a backend)
-  console.log('New dummy data submitted:', newData);
+  // Save to localStorage
+  saveDataToStorage(newEntry);
+  
+  // Update the CEI_DATA array with new values
+  updateCEIData(controlName, impl, verif, comp, outcome);
+  
+  // Refresh the dashboard
+  refreshDashboard();
   
   // Show success message
-  alert(`Data submitted successfully!\n\nControl: ${controlName}\nTotal Score: ${total}/100\n\nData logged to console.`);
+  alert(`✓ Data submitted successfully!\n\nControl: ${controlName}\nTotal Score: ${total}/100\n\nDashboard has been updated.`);
   
   // Close modal
   closeDataModal();
 }
 
+function saveDataToStorage(entry) {
+  try {
+    // Get existing data or initialize empty array
+    let storedData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    
+    // Add new entry
+    storedData.push(entry);
+    
+    // Keep only last 100 entries to avoid storage limits
+    if (storedData.length > 100) {
+      storedData = storedData.slice(-100);
+    }
+    
+    // Save back to localStorage
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(storedData));
+    
+    console.log('✓ Data saved to localStorage:', entry);
+  } catch (error) {
+    console.error('Error saving to localStorage:', error);
+    alert('Warning: Data could not be saved to local storage.');
+  }
+}
+
+function updateCEIData(controlName, impl, verif, comp, outcome) {
+  // Find the control in CEI_DATA
+  const controlIndex = CEI_DATA.findIndex(c => c.name === controlName);
+  
+  if (controlIndex !== -1) {
+    // Update existing control
+    CEI_DATA[controlIndex].impl = impl;
+    CEI_DATA[controlIndex].verif = verif;
+    CEI_DATA[controlIndex].comp = comp;
+    CEI_DATA[controlIndex].outcome = outcome;
+    
+    // Update detail scores
+    CEI_DATA[controlIndex].detail.impl.score = impl;
+    CEI_DATA[controlIndex].detail.verif.score = verif;
+    CEI_DATA[controlIndex].detail.comp.score = comp;
+    CEI_DATA[controlIndex].detail.outcome.score = outcome;
+    
+    console.log(`✓ Updated ${controlName} in CEI_DATA`);
+  } else {
+    console.warn(`Control "${controlName}" not found in CEI_DATA`);
+  }
+}
+
+function refreshDashboard() {
+  // Rebuild CEI table with updated data
+  buildCEITable();
+  
+  // Recalculate and update SAEI
+  recalculateSAEI();
+  buildSAEIHero();
+  buildSAEIBreakdown();
+  
+  // Re-animate rings
+  setTimeout(animateRings, 100);
+  
+  // Refresh icons
+  lucide.createIcons();
+  
+  console.log('✓ Dashboard refreshed with new data');
+}
+
+function recalculateSAEI() {
+  // Calculate average CEI score across all controls
+  const avgCEI = CEI_DATA.reduce((sum, c) => sum + ceiTotal(c), 0) / CEI_DATA.length;
+  
+  // Update SAEI component for critical control effectiveness
+  const ctrlComponent = SAEI_COMPONENTS.find(c => c.key === 'ctrl');
+  if (ctrlComponent) {
+    ctrlComponent.score = Math.round(avgCEI);
+  }
+  
+  // Recalculate overall SAEI (weighted average)
+  const weights = { ctrl: 0.40, assur: 0.20, action: 0.15, lead: 0.15, audit: 0.10 };
+  let saeiScore = 0;
+  SAEI_COMPONENTS.forEach(comp => {
+    saeiScore += comp.score * (weights[comp.key] || 0);
+  });
+  
+  // Update SAEI ring value
+  const saeiRingVal = document.querySelector('.saei-ring-val');
+  if (saeiRingVal) {
+    saeiRingVal.textContent = Math.round(saeiScore);
+  }
+  
+  console.log(`✓ SAEI recalculated: ${Math.round(saeiScore)}`);
+}
+
+function loadDataFromStorage() {
+  try {
+    const storedData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    
+    if (storedData.length > 0) {
+      console.log(`✓ Loaded ${storedData.length} entries from localStorage`);
+      
+      // Apply the most recent entry for each control
+      const latestByControl = {};
+      storedData.forEach(entry => {
+        if (!latestByControl[entry.control] || 
+            new Date(entry.timestamp) > new Date(latestByControl[entry.control].timestamp)) {
+          latestByControl[entry.control] = entry;
+        }
+      });
+      
+      // Update CEI_DATA with stored values
+      Object.values(latestByControl).forEach(entry => {
+        updateCEIData(
+          entry.control,
+          entry.implementation,
+          entry.verification,
+          entry.compliance,
+          entry.outcome
+        );
+      });
+      
+      console.log('✓ CEI_DATA updated with stored values');
+    } else {
+      console.log('ℹ No stored data found, using default values');
+    }
+  } catch (error) {
+    console.error('Error loading from localStorage:', error);
+  }
+}
+
+// View stored data (for debugging)
+function viewStoredData() {
+  try {
+    const storedData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    console.table(storedData);
+    return storedData;
+  } catch (error) {
+    console.error('Error reading localStorage:', error);
+    return [];
+  }
+}
+
+// Clear all stored data (for debugging)
+function clearStoredData() {
+  if (confirm('Are you sure you want to clear all stored data? This cannot be undone.')) {
+    localStorage.removeItem(STORAGE_KEY);
+    console.log('✓ All stored data cleared');
+    alert('All data has been cleared. The page will reload with default values.');
+    location.reload();
+  }
+}
+
+// Open data history modal
+function openDataHistoryModal() {
+  const modal = document.getElementById('dataHistoryModal');
+  modal.classList.add('active');
+  
+  // Load and display data
+  const storedData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  const tbody = document.getElementById('history-table-body');
+  const countEl = document.getElementById('history-count');
+  
+  countEl.textContent = storedData.length;
+  
+  if (storedData.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8" style="padding: 40px; text-align: center; color: var(--muted);">
+          No data submitted yet. Click "Add Data" to submit your first entry.
+        </td>
+      </tr>`;
+  } else {
+    // Show most recent first
+    const sortedData = [...storedData].reverse();
+    tbody.innerHTML = sortedData.map(entry => {
+      const totalColor = entry.total >= 90 ? 'var(--green-txt)' : 
+                        entry.total >= 80 ? 'var(--blue-txt)' : 
+                        entry.total >= 70 ? 'var(--amber-txt)' : 'var(--red-txt)';
+      return `
+        <tr style="border-bottom: 1px solid var(--border);">
+          <td style="padding: 8px; font-size: 11px;">${entry.date || new Date(entry.timestamp).toLocaleString()}</td>
+          <td style="padding: 8px; font-weight: 600;">${entry.control}</td>
+          <td style="padding: 8px; text-align: center;">${entry.implementation}</td>
+          <td style="padding: 8px; text-align: center;">${entry.verification}</td>
+          <td style="padding: 8px; text-align: center;">${entry.compliance}</td>
+          <td style="padding: 8px; text-align: center;">${entry.outcome}</td>
+          <td style="padding: 8px; text-align: center; font-weight: 700; color: ${totalColor};">${entry.total}</td>
+          <td style="padding: 8px; font-size: 11px; color: var(--muted); max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${entry.notes || ''}">${entry.notes || '-'}</td>
+        </tr>`;
+    }).join('');
+  }
+  
+  lucide.createIcons();
+}
+
+// Close data history modal
+function closeDataHistoryModal() {
+  const modal = document.getElementById('dataHistoryModal');
+  modal.classList.remove('active');
+}
+
+// Export data to CSV
+function exportDataToCSV() {
+  const storedData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  
+  if (storedData.length === 0) {
+    alert('No data to export');
+    return;
+  }
+  
+  // Create CSV content
+  const headers = ['Date/Time', 'Control', 'Implementation', 'Verification', 'Compliance', 'Outcome', 'Total', 'Notes'];
+  const csvRows = [headers.join(',')];
+  
+  storedData.forEach(entry => {
+    const row = [
+      `"${entry.date || new Date(entry.timestamp).toLocaleString()}"`,
+      `"${entry.control}"`,
+      entry.implementation,
+      entry.verification,
+      entry.compliance,
+      entry.outcome,
+      entry.total,
+      `"${(entry.notes || '').replace(/"/g, '""')}"`
+    ];
+    csvRows.push(row.join(','));
+  });
+  
+  const csvContent = csvRows.join('\n');
+  
+  // Create download link
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+  
+  link.setAttribute('href', url);
+  link.setAttribute('download', `control360_data_${new Date().toISOString().split('T')[0]}.csv`);
+  link.style.visibility = 'hidden';
+  
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  
+  console.log('✓ Data exported to CSV');
+}
+
 // Close modal when clicking outside
 document.addEventListener('click', function(event) {
-  const modal = document.getElementById('dataModal');
-  if (event.target === modal) {
+  const dataModal = document.getElementById('dataModal');
+  const historyModal = document.getElementById('dataHistoryModal');
+  
+  if (event.target === dataModal) {
     closeDataModal();
+  }
+  if (event.target === historyModal) {
+    closeDataHistoryModal();
   }
 });
 
@@ -2333,6 +2649,9 @@ function buildSupervisorBars() {
 //  INIT
 // ═══════════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
+  // ── Load stored data FIRST ──
+  loadDataFromStorage();
+  
   // ── CEI / SAEI ──
   buildCEITable();
   buildSAEIHero();
@@ -2353,6 +2672,11 @@ document.addEventListener('DOMContentLoaded', () => {
   buildGaugeChart();
   buildSupervisorBars();
   lucide.createIcons();
+  
+  // Log available debug functions
+  console.log('📊 Control 360 - Data Management Functions:');
+  console.log('  • viewStoredData() - View all data in localStorage');
+  console.log('  • clearStoredData() - Clear all stored data and reload');
 });
 </script>
 </body>
