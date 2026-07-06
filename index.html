@@ -710,57 +710,130 @@
      DATA INPUT MODAL
 ════════════════════════════════════════════════════════════ -->
 <div class="modal-overlay" id="dataModal">
-  <div class="modal-box">
+  <div class="modal-box" style="max-width: 800px;">
     <div class="modal-header">
-      <h3>Add  Data</h3>
+      <h3>Add Control Assessment Data</h3>
       <button class="modal-close" onclick="closeDataModal()">
         <i data-lucide="x" style="width:16px;height:16px;"></i>
       </button>
     </div>
     
     <form id="dataForm" onsubmit="submitData(event)">
-      <div class="modal-field">
-        <label>Control Name</label>
-        <select id="controlName" required>
-          <option value="">Select a control...</option>
-          <option value="Vehicle Interaction">Vehicle Interaction</option>
-          <option value="Isolation (LOTO)">Isolation (LOTO)</option>
-          <option value="Working at Heights">Working at Heights</option>
-          <option value="Lifting Operations">Lifting Operations</option>
-          <option value="Confined Space">Confined Space</option>
-        </select>
+      
+      <!-- Assessment Details -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+        <div class="modal-field">
+          <label>Control Name</label>
+          <select id="controlName" required>
+            <option value="">Select a control...</option>
+            <option value="Vehicle Interaction">Vehicle Interaction</option>
+            <option value="Isolation (LOTO)">Isolation (LOTO)</option>
+            <option value="Working at Heights">Working at Heights</option>
+            <option value="Lifting Operations">Lifting Operations</option>
+            <option value="Confined Space">Confined Space</option>
+          </select>
+        </div>
+
+        <div class="modal-field">
+          <label>Assessment Date</label>
+          <input type="date" id="assessmentDate" required />
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+        <div class="modal-field">
+          <label>Assessor Name</label>
+          <input type="text" id="assessorName" required placeholder="Enter assessor name" />
+        </div>
+
+        <div class="modal-field">
+          <label>Department / Area</label>
+          <select id="department" required>
+            <option value="">Select department...</option>
+            <option value="Crusher Maintenance">Crusher Maintenance</option>
+            <option value="Process Plant">Process Plant</option>
+            <option value="Mining Operations">Mining Operations</option>
+            <option value="Engineering">Engineering</option>
+            <option value="Maintenance">Maintenance</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Score Section -->
+      <div style="background: var(--surface2); border-radius: 10px; padding: 20px; margin-bottom: 16px;">
+        <div style="font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 14px;">
+          <i data-lucide="bar-chart-2" style="width:14px;height:14px;display:inline-block;vertical-align:middle;margin-right:6px;"></i>
+          Component Scores (0-25 each)
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;">
+          <div class="modal-field" style="margin-bottom: 0;">
+            <label>Implementation</label>
+            <input type="number" id="implScore" min="0" max="25" required placeholder="0-25" />
+          </div>
+
+          <div class="modal-field" style="margin-bottom: 0;">
+            <label>Verification</label>
+            <input type="number" id="verifScore" min="0" max="25" required placeholder="0-25" />
+          </div>
+
+          <div class="modal-field" style="margin-bottom: 0;">
+            <label>Compliance</label>
+            <input type="number" id="compScore" min="0" max="25" required placeholder="0-25" />
+          </div>
+
+          <div class="modal-field" style="margin-bottom: 0;">
+            <label>Outcome</label>
+            <input type="number" id="outcomeScore" min="0" max="25" required placeholder="0-25" />
+          </div>
+        </div>
+
+        <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 12px; color: var(--muted);">Total Score:</span>
+          <span id="totalScorePreview" style="font-size: 22px; font-weight: 900; color: var(--blue-txt);">0 / 100</span>
+        </div>
+      </div>
+
+      <!-- Additional Information -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+        <div class="modal-field">
+          <label>Risk Level</label>
+          <select id="riskLevel">
+            <option value="">Select level...</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+            <option value="Critical">Critical</option>
+          </select>
+        </div>
+
+        <div class="modal-field">
+          <label>Verification Method</label>
+          <select id="verifMethod">
+            <option value="">Select method...</option>
+            <option value="PTO">PTO (Planned Task Observation)</option>
+            <option value="Inspection">Inspection</option>
+            <option value="Audit">Audit</option>
+            <option value="Leadership Visit">Leadership Visit</option>
+          </select>
+        </div>
+
+        <div class="modal-field">
+          <label>Findings Count</label>
+          <input type="number" id="findingsCount" min="0" placeholder="Number of issues found" />
+        </div>
       </div>
 
       <div class="modal-field">
-        <label>Implementation Score (0-25)</label>
-        <input type="number" id="implScore" min="0" max="25" required placeholder="Enter score 0-25" />
-      </div>
-
-      <div class="modal-field">
-        <label>Verification Score (0-25)</label>
-        <input type="number" id="verifScore" min="0" max="25" required placeholder="Enter score 0-25" />
-      </div>
-
-      <div class="modal-field">
-        <label>Compliance Score (0-25)</label>
-        <input type="number" id="compScore" min="0" max="25" required placeholder="Enter score 0-25" />
-      </div>
-
-      <div class="modal-field">
-        <label>Outcome Score (0-25)</label>
-        <input type="number" id="outcomeScore" min="0" max="25" required placeholder="Enter score 0-25" />
-      </div>
-
-      <div class="modal-field">
-        <label>Notes (Optional)</label>
-        <textarea id="notes" placeholder="Enter any additional notes..."></textarea>
+        <label>Notes / Observations</label>
+        <textarea id="notes" placeholder="Enter any observations, issues found, or corrective actions required..." rows="3"></textarea>
       </div>
 
       <div class="modal-actions">
         <button type="button" class="btn btn-outline" onclick="closeDataModal()">Cancel</button>
         <button type="submit" class="btn btn-success">
           <i data-lucide="check" style="width:14px;height:14px;"></i>
-          Submit Data
+          Submit Assessment
         </button>
       </div>
     </form>
@@ -797,19 +870,21 @@
       <table style="width: 100%; font-size: 12px;">
         <thead style="position: sticky; top: 0; background: var(--surface); z-index: 10;">
           <tr>
-            <th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border);">Date/Time</th>
+            <th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border);">Date</th>
             <th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border);">Control</th>
-            <th style="padding: 8px; text-align: center; border-bottom: 2px solid var(--border);">Impl.</th>
-            <th style="padding: 8px; text-align: center; border-bottom: 2px solid var(--border);">Verif.</th>
-            <th style="padding: 8px; text-align: center; border-bottom: 2px solid var(--border);">Comp.</th>
-            <th style="padding: 8px; text-align: center; border-bottom: 2px solid var(--border);">Out.</th>
+            <th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border);">Assessor</th>
+            <th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border);">Dept</th>
+            <th style="padding: 8px; text-align: center; border-bottom: 2px solid var(--border);">I</th>
+            <th style="padding: 8px; text-align: center; border-bottom: 2px solid var(--border);">V</th>
+            <th style="padding: 8px; text-align: center; border-bottom: 2px solid var(--border);">C</th>
+            <th style="padding: 8px; text-align: center; border-bottom: 2px solid var(--border);">O</th>
             <th style="padding: 8px; text-align: center; border-bottom: 2px solid var(--border);">Total</th>
-            <th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border);">Notes</th>
+            <th style="padding: 8px; text-align: left; border-bottom: 2px solid var(--border);">Risk</th>
           </tr>
         </thead>
         <tbody id="history-table-body">
           <tr>
-            <td colspan="8" style="padding: 40px; text-align: center; color: var(--muted);">
+            <td colspan="10" style="padding: 40px; text-align: center; color: var(--muted);">
               No data submitted yet
             </td>
           </tr>
@@ -1133,8 +1208,50 @@ const STORAGE_KEY = 'control360_cei_data';
 function openDataModal() {
   const modal = document.getElementById('dataModal');
   modal.classList.add('active');
+  
+  // Set default date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('assessmentDate').value = today;
+  
+  // Add score input listeners for real-time total calculation
+  const scoreInputs = ['implScore', 'verifScore', 'compScore', 'outcomeScore'];
+  scoreInputs.forEach(id => {
+    const input = document.getElementById(id);
+    input.addEventListener('input', updateTotalScorePreview);
+  });
+  
+  // Reset total preview
+  updateTotalScorePreview();
+  
   // Re-render icons in modal
   lucide.createIcons();
+}
+
+function updateTotalScorePreview() {
+  const impl = parseInt(document.getElementById('implScore').value) || 0;
+  const verif = parseInt(document.getElementById('verifScore').value) || 0;
+  const comp = parseInt(document.getElementById('compScore').value) || 0;
+  const outcome = parseInt(document.getElementById('outcomeScore').value) || 0;
+  
+  const total = impl + verif + comp + outcome;
+  const preview = document.getElementById('totalScorePreview');
+  
+  if (preview) {
+    preview.textContent = `${total} / 100`;
+    
+    // Color code based on score
+    if (total >= 90) {
+      preview.style.color = 'var(--green-txt)';
+    } else if (total >= 80) {
+      preview.style.color = 'var(--blue-txt)';
+    } else if (total >= 70) {
+      preview.style.color = 'var(--amber-txt)';
+    } else if (total > 0) {
+      preview.style.color = 'var(--red-txt)';
+    } else {
+      preview.style.color = 'var(--blue-txt)';
+    }
+  }
 }
 
 function closeDataModal() {
@@ -1153,6 +1270,14 @@ function submitData(event) {
   const verif = parseInt(document.getElementById('verifScore').value);
   const comp = parseInt(document.getElementById('compScore').value);
   const outcome = parseInt(document.getElementById('outcomeScore').value);
+  
+  // Get additional fields
+  const assessmentDate = document.getElementById('assessmentDate').value;
+  const assessorName = document.getElementById('assessorName').value;
+  const department = document.getElementById('department').value;
+  const riskLevel = document.getElementById('riskLevel').value;
+  const verifMethod = document.getElementById('verifMethod').value;
+  const findingsCount = document.getElementById('findingsCount').value;
   const notes = document.getElementById('notes').value;
   
   // Calculate total
@@ -1166,6 +1291,12 @@ function submitData(event) {
     compliance: comp,
     outcome: outcome,
     total: total,
+    assessmentDate: assessmentDate,
+    assessorName: assessorName,
+    department: department,
+    riskLevel: riskLevel,
+    verificationMethod: verifMethod,
+    findingsCount: findingsCount || 0,
     notes: notes,
     timestamp: new Date().toISOString(),
     date: new Date().toLocaleString()
@@ -1181,7 +1312,7 @@ function submitData(event) {
   refreshDashboard();
   
   // Show success message
-  alert(`✓ Data submitted successfully!\n\nControl: ${controlName}\nTotal Score: ${total}/100\n\nDashboard has been updated.`);
+  alert(`✓ Assessment Submitted Successfully!\n\nControl: ${controlName}\nTotal Score: ${total}/100\nAssessor: ${assessorName}\nDepartment: ${department}\n\nDashboard has been updated.`);
   
   // Close modal
   closeDataModal();
@@ -1350,7 +1481,7 @@ function openDataHistoryModal() {
   if (storedData.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="8" style="padding: 40px; text-align: center; color: var(--muted);">
+        <td colspan="10" style="padding: 40px; text-align: center; color: var(--muted);">
           No data submitted yet. Click "Add Data" to submit your first entry.
         </td>
       </tr>`;
@@ -1361,16 +1492,23 @@ function openDataHistoryModal() {
       const totalColor = entry.total >= 90 ? 'var(--green-txt)' : 
                         entry.total >= 80 ? 'var(--blue-txt)' : 
                         entry.total >= 70 ? 'var(--amber-txt)' : 'var(--red-txt)';
+      
+      const riskColor = entry.riskLevel === 'Critical' ? 'var(--red-txt)' :
+                       entry.riskLevel === 'High' ? 'var(--amber-txt)' :
+                       entry.riskLevel === 'Medium' ? 'var(--blue-txt)' : 'var(--green-txt)';
+      
       return `
         <tr style="border-bottom: 1px solid var(--border);">
-          <td style="padding: 8px; font-size: 11px;">${entry.date || new Date(entry.timestamp).toLocaleString()}</td>
+          <td style="padding: 8px; font-size: 11px;">${entry.assessmentDate || entry.date || new Date(entry.timestamp).toLocaleDateString()}</td>
           <td style="padding: 8px; font-weight: 600;">${entry.control}</td>
+          <td style="padding: 8px; font-size: 11px;">${entry.assessorName || '-'}</td>
+          <td style="padding: 8px; font-size: 11px;">${entry.department || '-'}</td>
           <td style="padding: 8px; text-align: center;">${entry.implementation}</td>
           <td style="padding: 8px; text-align: center;">${entry.verification}</td>
           <td style="padding: 8px; text-align: center;">${entry.compliance}</td>
           <td style="padding: 8px; text-align: center;">${entry.outcome}</td>
           <td style="padding: 8px; text-align: center; font-weight: 700; color: ${totalColor};">${entry.total}</td>
-          <td style="padding: 8px; font-size: 11px; color: var(--muted); max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${entry.notes || ''}">${entry.notes || '-'}</td>
+          <td style="padding: 8px; font-size: 11px; font-weight: 600; color: ${riskColor};">${entry.riskLevel || '-'}</td>
         </tr>`;
     }).join('');
   }
@@ -1394,18 +1532,24 @@ function exportDataToCSV() {
   }
   
   // Create CSV content
-  const headers = ['Date/Time', 'Control', 'Implementation', 'Verification', 'Compliance', 'Outcome', 'Total', 'Notes'];
+  const headers = ['Assessment Date', 'Submission Time', 'Control', 'Assessor', 'Department', 'Implementation', 'Verification', 'Compliance', 'Outcome', 'Total', 'Risk Level', 'Verification Method', 'Findings Count', 'Notes'];
   const csvRows = [headers.join(',')];
   
   storedData.forEach(entry => {
     const row = [
+      `"${entry.assessmentDate || ''}"`,
       `"${entry.date || new Date(entry.timestamp).toLocaleString()}"`,
       `"${entry.control}"`,
+      `"${entry.assessorName || ''}"`,
+      `"${entry.department || ''}"`,
       entry.implementation,
       entry.verification,
       entry.compliance,
       entry.outcome,
       entry.total,
+      `"${entry.riskLevel || ''}"`,
+      `"${entry.verificationMethod || ''}"`,
+      entry.findingsCount || 0,
       `"${(entry.notes || '').replace(/"/g, '""')}"`
     ];
     csvRows.push(row.join(','));
@@ -1419,7 +1563,7 @@ function exportDataToCSV() {
   const url = URL.createObjectURL(blob);
   
   link.setAttribute('href', url);
-  link.setAttribute('download', `control360_data_${new Date().toISOString().split('T')[0]}.csv`);
+  link.setAttribute('download', `control360_assessments_${new Date().toISOString().split('T')[0]}.csv`);
   link.style.visibility = 'hidden';
   
   document.body.appendChild(link);
