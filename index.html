@@ -423,6 +423,19 @@
   .hm-comp-bar-fill { height: 100%; border-radius: 4px; }
   .hm-comp-items { margin-top: 8px; }
   .hm-comp-item  { font-size: 11px; color: var(--muted); padding: 1px 0; display: flex; align-items: flex-start; gap: 5px; }
+  
+  /* Heatmap item score rows */
+  .hm-item-score-row {
+    display: flex; align-items: center; gap: 6px; padding: 5px 4px;
+    border-bottom: 1px solid var(--border); transition: background .15s;
+    border-radius: 4px;
+  }
+  .hm-item-score-row:last-child { border-bottom: none; }
+  .hm-item-score-row:hover { background: var(--surface2); }
+  .hm-item-score-text { flex: 1; font-size: 11px; color: var(--text); line-height: 1.3; }
+  .hm-item-score-bar-wrap { width: 80px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+  .hm-item-score-bar-fill { height: 100%; border-radius: 3px; transition: width .6s ease; }
+  .hm-item-score-value { font-size: 10px; font-weight: 700; min-width: 36px; text-align: right; flex-shrink: 0; }
   .hm-formula    { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; padding: 10px 0 0 0; border-top: 1px solid var(--border); font-size: 13px; }
   .hm-formula .fv  { font-weight: 800; font-size: 14px; }
   .hm-formula .fp  { color: var(--muted); font-size: 15px; }
@@ -638,6 +651,19 @@
   .cei-formula-row .f-plus { color: var(--muted); font-size: 16px; }
   .cei-formula-row .f-eq   { color: var(--text); font-size: 16px; font-weight: 700; }
   .cei-formula-row .f-total{ font-size: 18px; font-weight: 900; }
+  
+  /* ── Item Progress Bars ──────────────────────────────────── */
+  .item-score-row {
+    display: flex; align-items: center; gap: 8px; padding: 6px;
+    border-bottom: 1px solid var(--border); transition: background .15s;
+    border-radius: 6px;
+  }
+  .item-score-row:last-child { border-bottom: none; }
+  .item-score-row:hover { background: var(--surface); }
+  .item-score-text { flex: 1; font-size: 12px; color: var(--text); line-height: 1.4; }
+  .item-score-bar-wrap { width: 100px; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; flex-shrink: 0; }
+  .item-score-bar-fill { height: 100%; border-radius: 4px; transition: width .6s ease; }
+  .item-score-value { font-size: 11px; font-weight: 700; min-width: 42px; text-align: right; flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -904,37 +930,9 @@
 ════════════════════════════════════════════════════════════ -->
 <div id="page-effectiveness" class="page active">
 
-  <!-- ══ CEI EXECUTIVE TABLE ══ -->
-  <div class="section-header">
-    <h2>Control Effectiveness Index (CEI)</h2><div class="sep"></div>
-    <span class="badge blue">Click any row to see breakdown</span>
-  </div>
-  <div class="card" style="padding:0; overflow:hidden;">
-    <div class="cei-table-wrap">
-      <table class="cei-table">
-        <thead>
-          <tr>
-            <th style="padding-left:14px;">Potential Unwated Events</th>
-            <th>CEI Score</th>
-            <th>Impl.</th>
-            <th>Verif.</th>
-            <th>Comp.</th>
-            <th>Outcome</th>
-            <th>Trend</th>
-            <th>Status</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="cei-table-body">
-          <!-- JS populated -->
-        </tbody>
-      </table>
-    </div>
-  </div>
-
   <!-- ══ SAEI HERO ══ -->
-  <div class="section-header" style="margin-top:24px;">
-    <h2>Assuarance Effective  Index (AEI)</h2><div class="sep"></div>
+  <div class="section-header">
+    <h2>Assurance Effective Index (AEI)</h2><div class="sep"></div>
     <span class="badge blue">Enterprise assurance view</span>
   </div>
   <div class="card saei-hero">
@@ -979,6 +977,34 @@
   </div>
   <div id="saei-breakdown-list">
     <!-- JS populated -->
+  </div>
+
+  <!-- ══ CEI EXECUTIVE TABLE ══ -->
+  <div class="section-header" style="margin-top:24px;">
+    <h2>Control Effectiveness Index (CEI)</h2><div class="sep"></div>
+    <span class="badge blue">Click any row to see breakdown</span>
+  </div>
+  <div class="card" style="padding:0; overflow:hidden;">
+    <div class="cei-table-wrap">
+      <table class="cei-table">
+        <thead>
+          <tr>
+            <th style="padding-left:14px;">Potential Unwated Events</th>
+            <th>CEI Score</th>
+            <th>Impl.</th>
+            <th>Verif.</th>
+            <th>Comp.</th>
+            <th>Outcome</th>
+            <th>Trend</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="cei-table-body">
+          <!-- JS populated -->
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- KPIs -->
@@ -1596,10 +1622,10 @@ const CEI_DATA = [
     trend: "up", trendColor: "var(--green-txt)",
     impl: 23, verif: 22, comp: 24, outcome: 23,
     detail: {
-      impl:    { score:23, items:["Barriers installed","Speed limits posted","Pedestrian lanes marked"] },
-      verif:   { score:22, items:["PTO completed: 10pts","Inspection completed: 5pts","Manager verification: 5pts","Exec verification: 2pts"] },
-      comp:    { score:24, items:["Pedestrian compliance: 98%","Vehicle speed compliance: 94%","Barrier compliance: 100%"] },
-      outcome: { score:23, items:["No vehicle/pedestrian incidents","0 near misses this month","1 minor violation — closed"] },
+      impl:    { score:23, items:["Barriers installed: 8/8pts","Speed limits posted: 7/8pts","Pedestrian lanes marked: 8/9pts"] },
+      verif:   { score:22, items:["PTO completed: 10/10pts","Inspection completed: 5/5pts","Manager verification: 5/5pts","Exec verification: 2/5pts"] },
+      comp:    { score:24, items:["Pedestrian compliance: 8/8pts","Vehicle speed compliance: 8/8pts","Barrier compliance: 8/9pts"] },
+      outcome: { score:23, items:["No vehicle incidents: 10/10pts","Near misses: 8/8pts","Violation closure: 5/7pts"] },
     }
   },
   {
@@ -1607,10 +1633,10 @@ const CEI_DATA = [
     trend: "flat", trendColor: "var(--muted)",
     impl: 22, verif: 21, comp: 23, outcome: 22,
     detail: {
-      impl:    { score:22, items:["Lockout stations installed","Isolation registers in place","Tags available at all points"] },
-      verif:   { score:21, items:["PTO completed: 10pts","Inspection completed: 5pts","Manager verification: 4pts","Exec verification: 2pts"] },
-      comp:    { score:23, items:["Isolation compliance: 100%","LOTO procedure compliance: 92%","PPE compliance: 96%"] },
-      outcome: { score:22, items:["No isolation-related incidents","1 near miss — actioned","0 repeat violations"] },
+      impl:    { score:22, items:["Lockout stations installed: 8/8pts","Isolation registers in place: 7/8pts","Tags available at points: 7/9pts"] },
+      verif:   { score:21, items:["PTO completed: 10/10pts","Inspection completed: 5/5pts","Manager verification: 4/5pts","Exec verification: 2/5pts"] },
+      comp:    { score:23, items:["Isolation compliance: 10/10pts","LOTO procedure compliance: 8/8pts","PPE compliance: 5/7pts"] },
+      outcome: { score:22, items:["No isolation incidents: 10/10pts","Near miss actioned: 7/8pts","Repeat violations: 5/7pts"] },
     }
   },
   {
@@ -1618,10 +1644,10 @@ const CEI_DATA = [
     trend: "down", trendColor: "var(--red-txt)",
     impl: 23, verif: 18, comp: 18, outcome: 16,
     detail: {
-      impl:    { score:23, items:["Harnesses available","Anchor points installed","Permit system available"] },
-      verif:   { score:18, items:["PTO completed: 10pts","Inspection completed: 5pts","Manager verification: 3pts","Exec verification: 0pts"] },
-      comp:    { score:18, items:["Harness usage: 72%","Permit compliance: 80%","Anchor use: 78%"] },
-      outcome: { score:16, items:["1 near miss this month","Weather assessment failures: 28%","Repeat permit gaps noted"] },
+      impl:    { score:23, items:["Harnesses available: 8/8pts","Anchor points installed: 8/8pts","Permit system available: 7/9pts"] },
+      verif:   { score:18, items:["PTO completed: 10/10pts","Inspection completed: 5/5pts","Manager verification: 3/5pts","Exec verification: 0/5pts"] },
+      comp:    { score:18, items:["Valid permits in use: 5/8pts","Safe access to scaffold: 6/9pts","Harness usage compliance: 7/8pts"] },
+      outcome: { score:16, items:["Near miss incidents: 5/10pts","Platform inspections passed: 6/8pts","Permit violations resolved: 5/7pts"] },
     }
   },
   {
@@ -1629,10 +1655,10 @@ const CEI_DATA = [
     trend: "up", trendColor: "var(--green-txt)",
     impl: 21, verif: 20, comp: 21, outcome: 19,
     detail: {
-      impl:    { score:21, items:["Lift plan templates in place","Crane inspection register","Rigging certification board"] },
-      verif:   { score:20, items:["PTO completed: 10pts","Inspection completed: 5pts","Manager verification: 5pts","Exec verification: 0pts"] },
-      comp:    { score:21, items:["Lift plan compliance: 88%","Banksman compliance: 100%","Exclusion zone compliance: 91%"] },
-      outcome: { score:19, items:["No lifting incidents","2 near misses — actioned","Rigging failures trending down"] },
+      impl:    { score:21, items:["Lift plan templates available: 8/8pts","Crane inspection register: 7/8pts","Rigging certification valid: 6/9pts"] },
+      verif:   { score:20, items:["PTO completed: 10/10pts","Inspection completed: 5/5pts","Manager verification: 5/5pts","Exec verification: 0/5pts"] },
+      comp:    { score:21, items:["Lift plan compliance: 7/8pts","Banksman present: 8/8pts","Exclusion zone established: 6/9pts"] },
+      outcome: { score:19, items:["No lifting incidents: 10/10pts","Near misses actioned: 5/6pts","Rigging failures trending: 4/9pts"] },
     }
   },
   {
@@ -1640,10 +1666,10 @@ const CEI_DATA = [
     trend: "up", trendColor: "var(--green-txt)",
     impl: 24, verif: 23, comp: 24, outcome: 23,
     detail: {
-      impl:    { score:24, items:["Entry permits in place","Gas monitoring equipment available","Rescue plan posted at entry"] },
-      verif:   { score:23, items:["PTO completed: 10pts","Inspection completed: 5pts","Manager verification: 5pts","Exec verification: 3pts"] },
-      comp:    { score:24, items:["Entry permit compliance: 100%","Gas testing compliance: 96%","Rescue equipment compliance: 98%"] },
-      outcome: { score:23, items:["No confined space incidents","0 near misses","Continuous improvement noted"] },
+      impl:    { score:24, items:["Entry permits available: 8/8pts","Gas monitoring equipment: 8/8pts","Rescue plan posted: 8/8pts"] },
+      verif:   { score:23, items:["PTO completed: 10/10pts","Inspection completed: 5/5pts","Manager verification: 5/5pts","Exec verification: 3/5pts"] },
+      comp:    { score:24, items:["Entry permit compliance: 10/10pts","Gas testing compliance: 8/8pts","Rescue equipment ready: 6/6pts"] },
+      outcome: { score:23, items:["No confined space incidents: 10/10pts","Zero near misses: 8/8pts","Continuous improvement: 5/5pts"] },
     }
   },
 ];
@@ -1794,9 +1820,36 @@ function buildCEIDetail(row, i) {
 
   const cards = components.map(c => {
     const pct = (c.score / c.max) * 100;
-    const items = row.detail[c.key].items.map(it =>
-      `<div style="font-size:12px;color:var(--muted);padding:2px 0;display:flex;align-items:flex-start;gap:6px;"><span style="color:${c.color};flex-shrink:0;">•</span>${it}</div>`
-    ).join('');
+    
+    // Parse each item to extract score and text
+    const itemRows = row.detail[c.key].items.map(itemStr => {
+      // Extract pattern like "Text: X/Ypts" or "Text: Xpts"
+      const match = itemStr.match(/^(.+?):\s*(\d+)\/(\d+)pts$/);
+      if (match) {
+        const text = match[1].trim();
+        const achieved = parseInt(match[2]);
+        const maximum = parseInt(match[3]);
+        const itemPct = (achieved / maximum) * 100;
+        
+        // Color based on percentage
+        let barColor = c.color;
+        if (itemPct < 60) barColor = '#dc2626';
+        else if (itemPct < 80) barColor = '#d97706';
+        else if (itemPct < 90) barColor = '#2563eb';
+        else barColor = '#16a34a';
+        
+        return `
+          <div class="item-score-row">
+            <span class="item-score-text">${text}</span>
+            <div class="item-score-bar-wrap">
+              <div class="item-score-bar-fill" style="width:${itemPct}%; background:${barColor};"></div>
+            </div>
+            <span class="item-score-value" style="color:${barColor};">${achieved}/${maximum}</span>
+          </div>`;
+      }
+      return `<div style="font-size:12px;color:var(--muted);padding:2px 0;">${itemStr}</div>`;
+    }).join('');
+    
     return `
       <div class="cei-comp-card">
         <div class="cei-comp-card-label">${c.label} <span style="color:var(--muted);font-weight:400;">(25%)</span></div>
@@ -1807,7 +1860,7 @@ function buildCEIDetail(row, i) {
         <div class="cei-comp-bar-wrap">
           <div class="cei-comp-bar-fill" style="width:${pct}%;background:${c.color};"></div>
         </div>
-        <div style="margin-top:10px;">${items}</div>
+        <div style="margin-top:12px; padding-top:10px; border-top:1px solid var(--border);">${itemRows}</div>
       </div>`;
   }).join('');
 
@@ -2109,60 +2162,60 @@ const HEATMAP_WAH = [
     name: "Permit to Work", pct: 100, status: "green",
     cei: { impl:25, verif:24, comp:25, outcome:25 },
     detail: {
-      impl:    { items:["Permit templates available","Issuing authority trained","Digital sign-off in place"] },
+      impl:    { items:["Permit templates available: 8/8pts","Issuing authority trained: 9/9pts","Digital sign-off in place: 8/8pts"] },
       verif:   { items:["PTOs completed: 10/10pts","Inspections completed: 5/5pts","Manager verification: 5/5pts","Exec verification: 4/5pts"] },
-      comp:    { items:["Permit compliance: 100%","Pre-task briefing: 100%","Close-out compliance: 100%"] },
-      outcome: { items:["0 permit violations","0 near misses related","No incidents this period"] },
+      comp:    { items:["Valid permit in use: 10/10pts","Pre-task briefing completed: 8/8pts","Close-out compliance: 7/7pts"] },
+      outcome: { items:["Zero permit violations: 10/10pts","No near misses related: 8/8pts","No incidents this period: 7/7pts"] },
     }
   },
   {
     name: "Harness", pct: 95, status: "green",
     cei: { impl:24, verif:22, comp:24, outcome:23 },
     detail: {
-      impl:    { items:["Harnesses available at store","Tag inspection register up to date","Spare harnesses on standby"] },
+      impl:    { items:["Harnesses available at store: 8/8pts","Tag inspection register updated: 8/8pts","Spare harnesses on standby: 8/8pts"] },
       verif:   { items:["PTOs completed: 10/10pts","Inspections completed: 4/5pts","Manager verification: 4/5pts","Exec verification: 4/5pts"] },
-      comp:    { items:["Harness usage compliance: 95%","Pre-use inspection compliance: 94%","Correct harness type: 97%"] },
-      outcome: { items:["0 fall incidents","1 near miss — harness detachment (actioned)","Trending stable"] },
+      comp:    { items:["Harness usage compliance: 8/8pts","Pre-use inspection done: 8/9pts","Correct harness type: 8/7pts"] },
+      outcome: { items:["Zero fall incidents: 10/10pts","Near miss actioned: 7/8pts","Trending stable: 6/5pts"] },
     }
   },
   {
     name: "Anchor Point", pct: 90, status: "green",
     cei: { impl:23, verif:21, comp:23, outcome:21 },
     detail: {
-      impl:    { items:["Anchor points installed & certified","Load rating plaques posted","Inspection register maintained"] },
+      impl:    { items:["Anchor points installed & certified: 8/8pts","Load rating plaques posted: 7/8pts","Inspection register maintained: 8/9pts"] },
       verif:   { items:["PTOs completed: 10/10pts","Inspections completed: 5/5pts","Manager verification: 3/5pts","Exec verification: 3/5pts"] },
-      comp:    { items:["Anchor point usage: 90%","Certified anchor use: 92%","Double lanyard compliance: 88%"] },
-      outcome: { items:["0 anchor-related incidents","2 near misses — incorrect anchor use (corrected)","Follow-up inspection completed"] },
+      comp:    { items:["Anchor point usage: 8/9pts","Certified anchor use: 8/8pts","Double lanyard compliance: 7/8pts"] },
+      outcome: { items:["Zero anchor incidents: 10/10pts","Near misses corrected: 6/8pts","Follow-up inspection passed: 5/3pts"] },
     }
   },
   {
     name: "Rescue Plan", pct: 98, status: "green",
     cei: { impl:25, verif:24, comp:24, outcome:25 },
     detail: {
-      impl:    { items:["Rescue plan posted at work area","Rescue equipment available","Rescue team nominated & briefed"] },
+      impl:    { items:["Rescue plan posted at work area: 8/8pts","Rescue equipment available: 9/9pts","Rescue team nominated & briefed: 8/8pts"] },
       verif:   { items:["PTOs completed: 10/10pts","Inspections completed: 5/5pts","Manager verification: 5/5pts","Exec verification: 4/5pts"] },
-      comp:    { items:["Rescue plan review compliance: 98%","Team briefing compliance: 100%","Equipment check compliance: 95%"] },
-      outcome: { items:["0 rescue incidents","Rescue drill completed this month","All team members certified"] },
+      comp:    { items:["Rescue plan review compliance: 8/8pts","Team briefing compliance: 9/9pts","Equipment check compliance: 7/7pts"] },
+      outcome: { items:["Zero rescue incidents: 10/10pts","Rescue drill completed: 8/8pts","All team certified: 7/7pts"] },
     }
   },
   {
     name: "Weather Assessment", pct: 72, status: "red",
     cei: { impl:20, verif:15, comp:18, outcome:16 },
     detail: {
-      impl:    { items:["Wind speed gauges available","Weather check procedure exists","Stop-work threshold defined: >45 km/h"] },
+      impl:    { items:["Wind speed gauges available: 7/8pts","Weather check procedure exists: 6/8pts","Stop-work threshold defined: 7/9pts"] },
       verif:   { items:["PTOs completed: 7/10pts","Inspections completed: 3/5pts","Manager verification: 3/5pts","Exec verification: 2/5pts"] },
-      comp:    { items:["Pre-shift weather check: 72%","Mid-shift re-assessment: 68%","Work-stop compliance: 80%"] },
-      outcome: { items:["3 incidents of work continuing in marginal conditions","Weather-related near miss reported","Corrective action open — monitoring required"] },
+      comp:    { items:["Pre-shift weather check: 6/8pts","Platform safety in weather: 5/9pts","Work-stop compliance: 7/8pts"] },
+      outcome: { items:["Weather incidents: 5/10pts","Platform exposure risks: 6/8pts","Corrective action open: 5/7pts"] },
     }
   },
   {
     name: "Supervisor Present", pct: 96, status: "green",
     cei: { impl:24, verif:23, comp:24, outcome:24 },
     detail: {
-      impl:    { items:["Supervisor roster in place","Supervisor competency verified","On-site sign-in register maintained"] },
+      impl:    { items:["Supervisor roster in place: 8/8pts","Supervisor competency verified: 8/8pts","On-site sign-in register: 8/8pts"] },
       verif:   { items:["PTOs completed: 10/10pts","Inspections completed: 5/5pts","Manager verification: 4/5pts","Exec verification: 4/5pts"] },
-      comp:    { items:["Supervisor presence compliance: 96%","Toolbox talk delivery: 98%","Pre-task verification: 94%"] },
-      outcome: { items:["0 unsupervised incidents","1 near miss during supervisor handover (actioned)","Trending positive"] },
+      comp:    { items:["Supervisor presence: 8/8pts","Scaffold/platform inspections: 8/9pts","Pre-task verification: 8/7pts"] },
+      outcome: { items:["No unsupervised incidents: 10/10pts","Handover near miss actioned: 7/8pts","Trending positive: 7/6pts"] },
     }
   },
 ];
@@ -2172,60 +2225,60 @@ const HEATMAP_LIFT = [
     name: "Lift Plan Approved", pct: 100, status: "green",
     cei: { impl:25, verif:24, comp:25, outcome:25 },
     detail: {
-      impl:    { items:["Lift plan template available","Approval authority designated","Pre-lift briefing form in use"] },
+      impl:    { items:["Lift plan template available: 8/8pts","Approval authority designated: 9/9pts","Pre-lift briefing form in use: 8/8pts"] },
       verif:   { items:["PTOs completed: 10/10pts","Inspections: 5/5pts","Manager verification: 5/5pts","Exec: 4/5pts"] },
-      comp:    { items:["Lift plan compliance: 100%","Briefing compliance: 100%","Sign-off compliance: 100%"] },
-      outcome: { items:["0 lift plan violations","No related incidents","Consistent full compliance"] },
+      comp:    { items:["Lift plan compliance: 10/10pts","Briefing compliance: 8/8pts","Sign-off compliance: 7/7pts"] },
+      outcome: { items:["Zero lift plan violations: 10/10pts","No related incidents: 8/8pts","Consistent compliance: 7/7pts"] },
     }
   },
   {
     name: "Crane Inspection", pct: 88, status: "amber",
     cei: { impl:23, verif:20, comp:22, outcome:23 },
     detail: {
-      impl:    { items:["Crane inspection checklist in place","Defect register maintained","Third-party inspection due monthly"] },
+      impl:    { items:["Crane inspection checklist: 8/8pts","Defect register maintained: 7/8pts","Third-party inspection schedule: 8/9pts"] },
       verif:   { items:["PTOs completed: 9/10pts","Inspections: 4/5pts","Manager verification: 4/5pts","Exec: 3/5pts"] },
-      comp:    { items:["Pre-use inspection: 88%","Defect reporting: 91%","Shutdown-on-defect compliance: 100%"] },
-      outcome: { items:["1 crane defect found & resolved","0 crane-related incidents","Third-party inspection overdue — scheduled"] },
+      comp:    { items:["Pre-use inspection: 7/8pts","Defect reporting: 8/9pts","Shutdown on defect: 7/7pts"] },
+      outcome: { items:["Crane defect resolved: 10/10pts","No crane incidents: 8/8pts","Third-party overdue: 5/7pts"] },
     }
   },
   {
     name: "Rigging Inspection", pct: 76, status: "red",
     cei: { impl:21, verif:17, comp:19, outcome:18 },
     detail: {
-      impl:    { items:["Rigging inspection tags in use","Colour-code system implemented","Certifications display board installed"] },
+      impl:    { items:["Rigging inspection tags: 7/8pts","Colour-code system: 7/8pts","Certifications display: 7/9pts"] },
       verif:   { items:["PTOs completed: 8/10pts","Inspections: 4/5pts","Manager verification: 3/5pts","Exec: 2/5pts"] },
-      comp:    { items:["Rigging tag check: 76%","Certified rigger usage: 82%","Pre-lift rigging inspection: 74%"] },
-      outcome: { items:["2 rigging near misses this period","1 tag found expired — work stopped","Corrective action open — PRIORITY"] },
+      comp:    { items:["Rigging tag check: 6/8pts","Certified rigger usage: 7/9pts","Pre-lift rigging inspection: 6/8pts"] },
+      outcome: { items:["Rigging near misses: 5/10pts","Tag expired — work stopped: 7/8pts","Corrective action PRIORITY: 6/7pts"] },
     }
   },
   {
     name: "Ground Conditions", pct: 94, status: "green",
     cei: { impl:24, verif:22, comp:23, outcome:24 },
     detail: {
-      impl:    { items:["Ground bearing capacity chart posted","Outrigger pad procedure in place","Wet weather protocol documented"] },
+      impl:    { items:["Ground bearing capacity chart: 8/8pts","Outrigger pad procedure: 8/8pts","Wet weather protocol: 8/8pts"] },
       verif:   { items:["PTOs completed: 10/10pts","Inspections: 4/5pts","Manager verification: 4/5pts","Exec: 4/5pts"] },
-      comp:    { items:["Ground assessment compliance: 94%","Outrigger pad use: 96%","Wet weather protocol: 91%"] },
-      outcome: { items:["0 ground-related incidents","Stable and positive trend","No repeat violations"] },
+      comp:    { items:["Ground assessment compliance: 8/8pts","Outrigger pad use: 8/9pts","Wet weather protocol: 7/6pts"] },
+      outcome: { items:["Zero ground incidents: 10/10pts","Stable positive trend: 8/8pts","No repeat violations: 6/6pts"] },
     }
   },
   {
     name: "Banksman Assigned", pct: 100, status: "green",
     cei: { impl:25, verif:25, comp:25, outcome:25 },
     detail: {
-      impl:    { items:["Banksman register in place","Certification verified monthly","High-vis vest & signal equipment issued"] },
+      impl:    { items:["Banksman register in place: 8/8pts","Certification verified monthly: 9/9pts","High-vis & signal equipment: 8/8pts"] },
       verif:   { items:["PTOs completed: 10/10pts","Inspections: 5/5pts","Manager verification: 5/5pts","Exec: 5/5pts"] },
-      comp:    { items:["Banksman assignment: 100%","Signal compliance: 100%","Communication protocol: 100%"] },
-      outcome: { items:["0 signalling incidents","Perfect compliance record","Gold standard — no interventions needed"] },
+      comp:    { items:["Banksman assignment: 10/10pts","Signal compliance: 8/8pts","Communication protocol: 7/7pts"] },
+      outcome: { items:["Zero signalling incidents: 10/10pts","Perfect compliance record: 8/8pts","Gold standard maintained: 7/7pts"] },
     }
   },
   {
     name: "Exclusion Zone", pct: 91, status: "green",
     cei: { impl:23, verif:22, comp:23, outcome:23 },
     detail: {
-      impl:    { items:["Exclusion zone barriers available","Signage installed at lift areas","Zone size calculation guide posted"] },
+      impl:    { items:["Exclusion zone barriers: 8/8pts","Signage at lift areas: 7/8pts","Zone calculation guide: 8/9pts"] },
       verif:   { items:["PTOs completed: 10/10pts","Inspections: 4/5pts","Manager verification: 4/5pts","Exec: 4/5pts"] },
-      comp:    { items:["Exclusion zone establishment: 91%","Zone size correctness: 89%","Barrier maintenance: 94%"] },
-      outcome: { items:["0 exclusion zone incidents","1 observation — zone undersized (corrected)","Follow-up inspection passed"] },
+      comp:    { items:["Zone establishment: 8/8pts","Zone size correctness: 7/9pts","Barrier maintenance: 8/8pts"] },
+      outcome: { items:["Zero exclusion incidents: 10/10pts","Zone undersized corrected: 7/8pts","Follow-up passed: 6/5pts"] },
     }
   },
 ];
@@ -2529,9 +2582,36 @@ function populateHeatmap(id, data) {
       ];
       const cards = comps.map(c => {
         const pct = (c.score / 25) * 100;
-        const bullets = c.items.map(it =>
-          `<div class="hm-comp-item"><span style="color:${c.color};flex-shrink:0;">•</span>${it}</div>`
-        ).join('');
+        
+        // Parse each item to extract score and text
+        const itemRows = c.items.map(itemStr => {
+          // Extract pattern like "Text: X/Ypts"
+          const match = itemStr.match(/^(.+?):\s*(\d+)\/(\d+)pts$/);
+          if (match) {
+            const text = match[1].trim();
+            const achieved = parseInt(match[2]);
+            const maximum = parseInt(match[3]);
+            const itemPct = (achieved / maximum) * 100;
+            
+            // Color based on percentage
+            let barColor = c.color;
+            if (itemPct < 60) barColor = '#dc2626';
+            else if (itemPct < 80) barColor = '#d97706';
+            else if (itemPct < 90) barColor = '#2563eb';
+            else barColor = '#16a34a';
+            
+            return `
+              <div class="hm-item-score-row">
+                <span class="hm-item-score-text">${text}</span>
+                <div class="hm-item-score-bar-wrap">
+                  <div class="hm-item-score-bar-fill" style="width:${itemPct}%; background:${barColor};"></div>
+                </div>
+                <span class="hm-item-score-value" style="color:${barColor};">${achieved}/${maximum}</span>
+              </div>`;
+          }
+          return `<div class="hm-comp-item"><span style="color:${c.color};flex-shrink:0;">•</span>${itemStr}</div>`;
+        }).join('');
+        
         return `
           <div class="hm-comp-card">
             <div class="hm-comp-label">${c.label} <span style="font-weight:400;">(25%)</span></div>
@@ -2540,7 +2620,7 @@ function populateHeatmap(id, data) {
               <span class="hm-comp-max">/25</span>
             </div>
             <div class="hm-comp-bar"><div class="hm-comp-bar-fill" style="width:${pct}%;background:${c.color};"></div></div>
-            <div class="hm-comp-items">${bullets}</div>
+            <div style="margin-top:10px; padding-top:8px; border-top:1px solid var(--border);">${itemRows}</div>
           </div>`;
       }).join('');
 
