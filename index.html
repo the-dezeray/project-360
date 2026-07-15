@@ -154,6 +154,7 @@
     animation: slideUp .3s ease;
   }
   @keyframes slideUp { from{transform:translateY(20px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+  @keyframes slideDown { from{transform:translateY(-10px);opacity:0;} to{transform:translateY(0);opacity:1;} }
   .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
   .modal-header h3 { font-size: 18px; font-weight: 700; }
   .modal-close {
@@ -1674,13 +1675,63 @@ const CEI_DATA = [
   },
 ];
 
+// Demo data showing how each control's score is calculated
+const CRITICAL_CONTROL_BREAKDOWN = {
+  "Vehicle": {
+    score: 92,
+    calculation: [
+      { factor: "Implementation Score", value: 23, max: 25, desc: "Controls defined, resources allocated" },
+      { factor: "Verification Score", value: 22, max: 25, desc: "PTOs and inspections completed" },
+      { factor: "Compliance Score", value: 24, max: 25, desc: "Workers following procedures" },
+      { factor: "Outcome Score", value: 23, max: 25, desc: "Zero incidents, positive trend" }
+    ]
+  },
+  "Isolation": {
+    score: 88,
+    calculation: [
+      { factor: "Implementation Score", value: 22, max: 25, desc: "LOTO procedures in place" },
+      { factor: "Verification Score", value: 21, max: 25, desc: "Regular audits and checks" },
+      { factor: "Compliance Score", value: 23, max: 25, desc: "High adherence to isolation protocol" },
+      { factor: "Outcome Score", value: 22, max: 25, desc: "Few near-misses, no incidents" }
+    ]
+  },
+  "Hts": {
+    score: 75,
+    calculation: [
+      { factor: "Implementation Score", value: 20, max: 25, desc: "Equipment available but aging" },
+      { factor: "Verification Score", value: 15, max: 25, desc: "Inspection frequency below target" },
+      { factor: "Compliance Score", value: 18, max: 25, desc: "Weather checks inconsistent" },
+      { factor: "Outcome Score", value: 22, max: 25, desc: "No incidents but 2 near-misses" }
+    ]
+  },
+  "Lifting": {
+    score: 81,
+    calculation: [
+      { factor: "Implementation Score", value: 21, max: 25, desc: "Lift plans and procedures established" },
+      { factor: "Verification Score", value: 19, max: 25, desc: "Some inspections overdue" },
+      { factor: "Compliance Score", value: 20, max: 25, desc: "Exclusion zone occasionally breached" },
+      { factor: "Outcome Score", value: 21, max: 25, desc: "Minor incidents corrected" }
+    ]
+  },
+  "Confined": {
+    score: 94,
+    calculation: [
+      { factor: "Implementation Score", value: 24, max: 25, desc: "Comprehensive entry permit system" },
+      { factor: "Verification Score", value: 24, max: 25, desc: "Gas testing always completed" },
+      { factor: "Compliance Score", value: 23, max: 25, desc: "Rescue equipment always ready" },
+      { factor: "Outcome Score", value: 23, max: 25, desc: "Perfect safety record this period" }
+    ]
+  }
+};
+
 const SAEI_COMPONENTS = [
   {
     key: "ctrl",  label: "Critical Control\nEffectiveness", weight: "40%",
     score: 88, color: "#4ade80",
     desc: "Weighted average CEI score across all 5 critical controls.",
     chartData: { labels:["Vehicle","Isolation","Hts","Lifting","Confined"], values:[92,88,75,81,94] },
-    note: "Working at Heights (75) is pulling this component down. Targeted intervention required."
+    note: "Working at Heights (75) is pulling this component down. Targeted intervention required.",
+    hasBreakdown: true  // flag to enable click interactivity
   },
   {
     key: "assur", label: "Assurance\nCompletion", weight: "20%",
@@ -2024,6 +2075,7 @@ function buildSAEIBreakdown() {
               <div class="chart-wrap" style="max-height:200px;">
                 <canvas id="saei-chart-${i}" height="200"></canvas>
               </div>
+              ${c.hasBreakdown ? `<div style="font-size:11px;color:#6b7280;margin-top:8px;font-style:italic;">ℹ️ Click any bar to see how its score is calculated</div>` : ''}
             </div>
             <div>
               <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Score Calculation</div>
@@ -2044,6 +2096,7 @@ function buildSAEIBreakdown() {
               </div>
             </div>
           </div>
+          <div id="saei-breakdown-detail-${i}"></div>
         </div>
       </div>`;
   }).join('');
@@ -2088,7 +2141,7 @@ function drawSAEIChart(i) {
   if (!ctx) return;
   const c = SAEI_COMPONENTS[i];
 
-  saeiCharts[id] = new Chart(ctx, {
+  const chartConfig = {
     type: 'bar',
     data: {
       labels: c.chartData.labels,
@@ -2104,13 +2157,84 @@ function drawSAEIChart(i) {
     },
     options: {
       responsive: true, maintainAspectRatio: true,
-      plugins: { legend: { display:false }, tooltip: { callbacks: { label: ctx => ` ${ctx.raw}%` } } },
+      plugins: { 
+        legend: { display:false }, 
+        tooltip: { callbacks: { label: ctx => ` ${ctx.raw}%` } } 
+      },
       scales: {
         x: { ticks:{ color:'#6b7280', font:{ size:11 } }, grid:{ color:'rgba(0,0,0,.05)' } },
         y: { ticks:{ color:'#6b7280' }, grid:{ color:'rgba(0,0,0,.05)' }, min:0, max:100, beginAtZero:true }
       }
     }
-  });
+  };
+
+  // Add click handler for Critical Control chart
+  if (c.hasBreakdown) {
+    chartConfig.options.onClick = (evt, activeEls) => {
+      if (activeEls.length > 0) {
+        const index = activeEls[0].index;
+        const controlName = c.chartData.labels[index];
+        showControlBreakdown(controlName, i);
+      }
+    };
+    // Make cursor pointer on hover
+    chartConfig.options.onHover = (evt, activeEls) => {
+      evt.native.target.style.cursor = activeEls.length > 0 ? 'pointer' : 'default';
+    };
+  }
+
+  saeiCharts[id] = new Chart(ctx, chartConfig);
+}
+
+// Show detailed breakdown when a control bar is clicked
+function showControlBreakdown(controlName, componentIndex) {
+  const breakdown = CRITICAL_CONTROL_BREAKDOWN[controlName];
+  if (!breakdown) return;
+
+  const detailDiv = document.getElementById(`saei-breakdown-detail-${componentIndex}`);
+  if (!detailDiv) return;
+
+  const totalScore = breakdown.calculation.reduce((sum, item) => sum + item.value, 0);
+  const maxScore = breakdown.calculation.reduce((sum, item) => sum + item.max, 0);
+
+  detailDiv.innerHTML = `
+    <div style="padding:16px;margin-top:16px;animation:slideDown .3s ease-out;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <h4 style="font-size:14px;font-weight:700;color:#1f2937;margin:0;">${controlName} — Score Breakdown</h4>
+        <button onclick="hideControlBreakdown(${componentIndex})" style="background:none;border:none;cursor:pointer;color:#6b7280;font-size:18px;line-height:1;padding:4px;">&times;</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #4ade8044;">
+        <div style="width:48px;height:48px;border-radius:50%;background:#4ade80;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <span style="font-size:16px;font-weight:900;color:white;">${breakdown.score}</span>
+        </div>
+        <div>
+          <div style="font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;">Overall Score</div>
+          <div style="font-size:12px;color:#4b5563;margin-top:2px;">${totalScore}/${maxScore} points</div>
+        </div>
+      </div>
+      ${breakdown.calculation.map(item => {
+        const pct = (item.value / item.max) * 100;
+        return `
+          <div style="margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-size:12px;font-weight:600;color:#374151;">${item.factor}</span>
+              <span style="font-size:11px;font-weight:700;color:#4ade80;">${item.value}/${item.max}</span>
+            </div>
+            <div style="height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden;margin-bottom:4px;">
+              <div style="height:100%;background:#4ade80;width:${pct}%;transition:width .6s ease-out;"></div>
+            </div>
+            <div style="font-size:11px;color:#6b7280;line-height:1.4;">${item.desc}</div>
+          </div>
+        `;
+      }).join('')}
+ 
+    </div>
+  `;
+}
+
+function hideControlBreakdown(componentIndex) {
+  const detailDiv = document.getElementById(`saei-breakdown-detail-${componentIndex}`);
+  if (detailDiv) detailDiv.innerHTML = '';
 }
 
 // ═══════════════════════════════════════════════════════
